@@ -217,6 +217,7 @@
   height: 60px;
   cursor: pointer;
   z-index: 1000;
+  margin-right: 90%;
 }
 
 .jepun {
@@ -236,21 +237,45 @@
   .logo {
     left: 75vw;
   }
+
+  .landing-greeting{
+    left: 23vw;
+    top: 180px;
+  }
   
   .side-social.fb {
     left: 85vw;
   }
+
+  .side-prev-bar {
+    display: none;
+  }
   
+  .side-next-bar {
+    display: none;
+  }
+  
+  .side-prev-text {
+    display: none;
+  }
+  
+  .side-next-text {
+  display: none;
+  }
   .side-social.ig {
     left: 84.8vw;
   }
   
   .scroll-label {
-    margin-left: 84vw;
+    margin-top: 700px;
+    margin-left: 85vw;
+  }
+  .indicator{
+    margin-top: 590;
   }
 }
 
-/* Laptop kecil (1024px - 1280px) */
+/* Laptop kecil*/
 @media (max-width: 1280px) {
   .brand-title {
     left: 4vw;
@@ -280,9 +305,25 @@
     top: 480px;
   }
 
+  .side-prev-bar {
+    display: none;
+  }
+  
+  .side-next-bar {
+    display: none;
+  }
+  
+  .side-prev-text {
+    display: none;
+  }
+  
+  .side-next-text {
+  display: none;
+  }
+
   .wrapper-indicator {
     margin-left: 16vw;
-    margin-top: 200px;
+    margin-top: 210px;
   }
 
   .green-panel {
@@ -315,6 +356,7 @@
   .wa-float {
     width: 55px;
     height: 55px;
+    margin-right: 90%;
   }
 }
 
@@ -327,7 +369,7 @@
 
   .landing-greeting {
     left: 12vw;
-    top: 150px;
+    top: 120px;
   }
   
   .greet-black, .greet-green {
@@ -335,56 +377,50 @@
   }
 
   .top-menu {
-    left: 20vw;
-    gap: 12px;
-  }
-  
-  .menu-item {
-    font-size: 13px;
+    display: none;
   }
 
-  .side-prev-bar,
-  .side-next-bar {
-    width: 15%;
-  }
   
   .side-prev-bar {
-    margin-left: 18px;
+    display: none;
   }
   
   .side-next-bar {
-    margin-left: 130px;
+    display: none;
   }
   
   .side-prev-text {
-    left: 110px;
+    display: none;
   }
   
   .side-next-text {
-    left: 110px;
+  display: none;
   }
 
   .landing-desc {
     left: 12vw;
     width: 420px;
-    top: 320px;
+    top: 290px;
     font-size: 15px;
   }
 
   .tombol {
     left: 12vw;
-    top: 460px;
+    top: 430px;
     width: 200px;
     height: 50px;
   }
 
   .wrapper-indicator {
-    margin-left: 12vw;
-    margin-top: 190px;
+    position: absolute;
+    left: 12vw;
+    bottom: 100px;
+    margin: 0;
   }
   
   .indicator {
     font-size: 17px;
+    padding: 3px 7px;
   }
 
   .green-panel {
@@ -419,6 +455,7 @@
   .wa-float {
     width: 50px;
     height: 50px;
+    margin-right: 90%;
   }
 }
 
@@ -432,7 +469,7 @@
 
   .landing-greeting {
     left: 10vw;
-    top: 120px;
+    top: 100px;
   }
   
   .greet-black, .greet-green {
@@ -440,13 +477,7 @@
   }
 
   .top-menu {
-    left: 18vw;
-    top: 48px;
-    gap: 10px;
-  }
-  
-  .menu-item {
-    font-size: 11px;
+    display: none;
   }
 
   .side-prev-bar,
@@ -462,21 +493,23 @@
   .landing-desc {
     left: 10vw;
     width: 50vw;
-    top: 280px;
+    top: 260px;
     font-size: 13px;
   }
 
   .tombol {
     left: 10vw;
-    top: 400px;
+    top: 380px;
     width: 180px;
     height: 45px;
     font-size: 14px;
   }
 
   .wrapper-indicator {
-    margin-left: 10vw;
-    margin-top: 160px;
+    position: absolute;
+    left: 10vw;
+    bottom: 80px;
+    margin: 0;
   }
   
   .indicator {
@@ -521,6 +554,7 @@
   .wa-float {
     width: 45px;
     height: 45px;
+    margin-right: 90%;
   }
 }
 
@@ -656,7 +690,6 @@
     font-size: 16px;
   }
 
-  /* Hide elements yang tidak penting di mobile */
   .green-panel {
     display: none;
   }
@@ -686,6 +719,7 @@
     height: 50px;
     right: 20px;
     bottom: 20px;
+    margin-right: 90%;
   }
 }
 
@@ -737,6 +771,7 @@
     height: 48px;
     right: 18px;
     bottom: 18px;
+    margin-right: 80vw;
   }
 }
 
@@ -829,5 +864,6 @@
     height: 45px;
     right: 15px;
     bottom: 15px;
+    margin-right: 80vw;
   }
 }
