@@ -4,7 +4,10 @@ export default function Home() {
   return (
     <div className="home-wrapper">
 
-      <div className="brand-title">Jepun Bali Kencana.</div>
+      <div className="brand-title">
+        <span className="atas">Jepun Bali</span>
+        <span className="bawah">Kencana.</span>
+      </div>
 
       <div className="landing-greeting">
         <span className="greet-black">Om</span>
@@ -37,9 +40,9 @@ export default function Home() {
             <div className="indicator">05</div>
       </div>
      
+      <img className="logo" src="/logo.png" alt="logo" />
       <div className="side-social fb">facebook</div>
       <div className="side-social ig">instagram</div>
-      <img className="top-img" src="/logo.png" alt="logo" />
 
       <div className="landing-desc">
         Selamat datang di Jepun Bali Kencana, tempat di mana keindahan 
@@ -49,7 +52,7 @@ export default function Home() {
 
       <img className ='jepun' src="/image 9.png" alt="jepun"/>
             <div className="green-panel"></div>
-      <button className="cta-btn">
+      <button className="tombol">
         jelajahi →
       </button>
       <img className="wa-float" src="/Social Icons.svg" alt="whatsapp"/>
