@@ -1,0 +1,221 @@
+.home-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.brand-title {
+  width: 180px;
+  height: 90px;
+  position: absolute;
+  left: 87px;
+  top: 24px;
+  font-weight: 800;
+  font-size: 30px;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.landing-greeting {
+    position: absolute; 
+    left: 318px; 
+    top: 190px;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  gap: 0;
+}
+
+.greet-black { 
+    color: black; 
+    font-size: 60px; 
+    font-weight: 700; 
+    font-family: Playfair; 
+} 
+.greet-green { 
+    color: #688F4E; 
+    font-size: 60px; 
+    font-weight: 700; 
+    font-family: Playfair; 
+}
+
+.top-menu {
+  display: flex;
+  position: absolute;
+  left: 390px;
+  top: 54px;
+  gap: 16px;
+}
+
+.menu-item {
+  font-size: 15px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: black;
+  cursor: pointer;
+}
+
+.menu-item.active {
+  color: #648050;
+}
+
+/* Side Navigation */
+.side-prev-bar {
+  width: 100%;
+  height: 90px;
+}
+
+.side-next-bar {
+  width: 100%;
+  height: 90px;
+}
+
+.side-prev-text,
+.side-next-text {
+  position: absolute;
+  font-size: 18px;
+  font-family: Inter;
+  font-weight: 400;
+  transform: rotate(-90deg);
+  text-transform: uppercase;
+}
+
+.side-prev-text {
+  left: 134px;
+  top: 312px;
+}
+
+.side-next-text {
+  left: 134px;
+  top: 410px;
+}
+
+.wrapper-indicator {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-top: 530px;
+    margin-left: 315px;
+}
+
+.indicator {
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: black;
+  font-size: 19px;
+}
+
+.indicator.active {
+  color: #648050;
+}
+
+
+.green-panel {
+  width: 361px;
+  height: 100%;
+  background: #EBF6E5;
+  border-radius: 5px;
+  position:absolute;
+  margin-right: 130px;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
+
+
+.landing-desc {
+  position: absolute;
+  left: 314px;
+  top: 330px;
+  width: 520px;
+  font-size: 16px;
+  font-family: Inter;
+  font-weight: 500;
+}
+
+/* Button */
+.cta-btn {
+  position: absolute;
+  left: 314px;
+  top: 473px;
+  background: #678E4D;
+  width: 220px;
+  height: 55px;
+  color: white;
+  border: none;
+  font-size: 16px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* Image right top */
+.top-img {
+  position: absolute;
+  margin-right: 100px;
+  margin-left: 10px;
+  top: 0;
+  height: 199px;
+  width: 199px;
+}
+
+/* Social right */
+.side-social {
+  position: absolute;
+  font-size: 22px;
+  font-family: Inter;
+  font-weight: 400;
+  transform: rotate(-90deg);
+  text-transform: uppercase;
+  color: black;
+  margin-bottom: 400px;
+}
+
+.side-social.fb {
+  right: 0;
+  top: 360px;
+  left: 1406px;
+}
+
+.side-social.ig {
+  right: 0;
+  top: 220px;
+  left: 1404px;
+}
+
+.scroll-label {
+    position: absolute;
+    margin-top: 400px;
+    margin-left: 1324px;
+    transform: rotate(-90deg);
+    transform-origin: right bottom; 
+    justify-content: center;
+    display: flex;
+    flex-direction: column; 
+    color: black; 
+    font-size: 22px; 
+    font-family: Inter; 
+    font-weight: 400; 
+    text-transform: uppercase; 
+    line-height: 25px;
+    }
+
+.jepun {
+    width: 30%; 
+    height: 30%;
+    margin-left: 1660px;
+    border-radius: 105px;
+    position: relative;
+    right: 50%;
+    top: 50%;
+    transform: translateY(-110%);
+    z-index: 2;
+}
+
+.wa-float {
+  width: 7%;
+  height: 8%;
+  position: fixed;
+  left: 30px;
+  bottom: 37px;
+}
