@@ -1,5 +1,5 @@
 .home-wrapper {
-  width: 100vw;
+  width: 99vw;
   height: 100vh;
   position: relative;
   overflow: hidden;
@@ -47,10 +47,10 @@
     font-family: Playfair; 
 }
 
-.top-menu {
+.navbar {
   display: flex;
   position: absolute;
-  left: 390px;
+  left: 301px;
   top: 54px;
   gap: 16px;
 }
@@ -61,6 +61,9 @@
   text-transform: uppercase;
   color: black;
   cursor: pointer;
+}
+.menu-item:hover {
+  color: #648050;
 }
 
 .menu-item.active {
@@ -115,9 +118,9 @@
   border-radius: 4px;
   color: black;
   font-size: 19px;
+  cursor: pointer;
 }
-
-.indicator.active {
+:hover.indicator {
   color: #648050;
 }
 
@@ -290,7 +293,7 @@
     font-size: 55px;
   }
 
-  .top-menu {
+  .navbar {
     left: 25vw;
   }
 
@@ -376,7 +379,7 @@
     font-size: 48px;
   }
 
-  .top-menu {
+  .navbar {
     display: none;
   }
 
@@ -476,7 +479,7 @@
     font-size: 40px;
   }
 
-  .top-menu {
+  .navbar {
     display: none;
   }
 
@@ -575,7 +578,7 @@
     font-size: 32px;
   }
 
-  .top-menu {
+  .navbar {
     display: none;
   }
 
@@ -645,7 +648,7 @@
     font-size: 40px;
   }
 
-  .top-menu {
+  .navbar {
     display: none;
   }
   
@@ -798,7 +801,7 @@
     font-size: 32px;
   }
 
-  .top-menu {
+  .navbar {
     display: none;
   }
   

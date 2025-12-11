@@ -1,3 +1,4 @@
+import "../styles/home.css";
 export default function HeroSection() {
   return (
     <section id="hero" className="home-wrapper">
@@ -11,8 +12,8 @@ export default function HeroSection() {
         <span className="greet-green">Swastyastu</span>
       </div>
 
-      <nav className="top-menu">
-        <div className="menu-item active">home</div>
+      <nav className="navbar">
+        <div className="menu-item">home</div>
         <div className="menu-item">Category</div>
         <div className="menu-item">Testimony</div>
         <div className="menu-item">gallery</div>
@@ -30,7 +31,7 @@ export default function HeroSection() {
       <div className="scroll-label">Scroll down</div>
       
       <div className="wrapper-indicator">
-        <div className="indicator active">01</div>
+        <div className="indicator">01</div>
         <div className="indicator">02</div>
         <div className="indicator">03</div>
         <div className="indicator">04</div>

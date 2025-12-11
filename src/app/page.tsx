@@ -1,7 +1,6 @@
-import "./styles/home.css";
 import HeroSection from "./sections/HeroSection";
 import CategorySection from "./sections/CategorySection";
-import TestimonySection from "./sections/TestimonySection";
+import TestimonySection from "./sections/testimony/TestimonySection";
 import GallerySection from "./sections/GallerySection";
 import ContactSection from "./sections/ContactSection";
 

@@ -1,0 +1,140 @@
+.testimony-section {
+  display: flex;
+  justify-content: center;
+}
+
+.testimony-container {
+  width: 85%;
+  display: flex;
+  justify-content: center;
+}
+
+.testimony-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.testimony-header {
+  width: 40%;
+}
+
+.testimony-title {
+  color: black;
+  font-size: 48px;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+
+.testimony-description {
+  color: rgba(0, 0, 0, 0.67);
+  font-size: 18px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  max-width: 755px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.testimony-button {
+  background: #67904E;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  padding: 16px 32px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.testimony-button:hover {
+  background: #567d42;
+  color: white;
+}
+
+.testimony-cards-wrapper {
+  width: 55%;
+  height: 340px; /* tinggi area card */
+  overflow-y: auto; /* scroll vertikal */
+  padding-right: 10px; /* sedikit ruang scroll */
+}
+
+.testimony-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* dua kolom */
+  gap: 20px;
+}
+
+.testimony-cards-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.testimony-cards-wrapper::-webkit-scrollbar-thumb {
+  background: #d4d4d4;
+  border-radius: 10px;
+}
+
+.testimony-cards-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.testimonial-card {
+  background: #F5F2ED;
+  border-radius: 10px;
+  padding: 30px 20px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+.testimonial-card-icon {
+  width: 68px;
+  height: 47px;
+  background: #67904E;
+  flex-shrink: 0;
+}
+
+.testimonial-card-message {
+  color: #413D45;
+  font-size: 20px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.37px;
+  flex-grow: 1;
+  margin: 0;
+  font-style: normal;
+}
+
+.testimonial-card-author {
+  color: #67646A;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  line-height: 1.4;
+  font-style: normal;
+}
+
+@media (max-width: 768px) {
+  .testimony-title {
+    font-size: 32px;
+  }
+
+  .testimony-description {
+    font-size: 16px;
+  }
+
+  .testimony-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
