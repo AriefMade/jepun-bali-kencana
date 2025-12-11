@@ -34,7 +34,7 @@ export default function GallerySection() {
   return (
     <section className={styles.gallerySection}>
       <header className={styles.header}>
-        <h2 className={styles.title}>Gallery</h2>
+        <h3 className={styles.title}>Gallery</h3>
         <a className={styles.viewAll}>Lihat Semua</a>
       </header>
 

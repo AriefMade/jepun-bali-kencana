@@ -125,6 +125,11 @@
   font-style: normal;
 }
 
+.quote{
+  width: 47.5px;
+  height: 27px;
+}
+
 @media (max-width: 768px) {
   .testimony-title {
     font-size: 32px;

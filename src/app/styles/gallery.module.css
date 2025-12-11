@@ -2,6 +2,7 @@
   width: 100%;
   background: white;
   padding: 60px 130px;
+  overflow: hidden;
 }
 
 .header {
@@ -19,7 +20,8 @@
 }
 
 .viewAll {
-  font-size: 30px;
+  margin-top: 55px;
+  font-size: 21px;
   color: #637E59;
   font-weight: 500;
   cursor: pointer;
@@ -27,16 +29,43 @@
 
 .galleryGrid {
   width: 100%;
-  max-width: 1650px;
-  margin-inline: auto;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  max-width: none;
+  display: flex;
   gap: 40px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 20px;
+  padding-top: 15px;
+  scroll-behavior: smooth;
+}
+
+.galleryGrid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.galleryGrid::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.galleryGrid::-webkit-scrollbar-thumb {
+  background: #637E59;
+  border-radius: 10px;
+}
+
+.galleryGrid::-webkit-scrollbar-thumb:hover {
+  background: #4a5f44;
 }
 
 .card {
   display: flex;
   flex-direction: column;
+  min-width: 600px;
+  flex-shrink: 0;
+}
+
+.card:nth-child(even) {
+  margin-top: 150px;
 }
 
 .imageWrapper {

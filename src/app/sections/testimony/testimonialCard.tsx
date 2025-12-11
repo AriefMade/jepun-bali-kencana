@@ -17,14 +17,14 @@ export default function TestimonialCard({ name, message }: TestimonialCardProps)
       }}
     >
       <div>
-        <div
-          style={{
-            width: 40,
-            height: 25,
-            background: "#67904E",
-            borderRadius: "4px"
-          }}
-        ></div>
+        <img className="quote" src={"/Vector.svg"}
+          // style={{
+          //   width: 40,
+          //   height: 25,
+          //   background: "#67904E",
+          //   borderRadius: "4px"
+          // }}
+        />
 
         <p
           style={{
