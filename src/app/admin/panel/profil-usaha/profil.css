@@ -1,0 +1,406 @@
+.profil-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: white;
+  overflow: hidden;
+}
+
+.nav-item-active {
+  width: 330.10px;
+  height: 51.58px;
+  left: 3px;
+  top: 477.50px;
+  position: absolute;
+  background: #F3F3F3;
+  border-radius: 7px;
+}
+
+.nav-dashboard {
+  width: 155.50px;
+  height: 18.66px;
+  left: 95.81px;
+  top: 186px;
+  position: absolute;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  font-size: 22px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.44px;
+  word-wrap: break-word;
+}
+
+.nav-galeri {
+  width: 155.50px;
+  height: 18.66px;
+  left: 95.81px;
+  top: 289.99px;
+  position: absolute;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  font-size: 22px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.44px;
+  word-wrap: break-word;
+}
+
+.nav-testimoni {
+  width: 155.50px;
+  height: 18.66px;
+  left: 95.81px;
+  top: 391.30px;
+  position: absolute;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  font-size: 22px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.44px;
+  word-wrap: break-word;
+}
+
+.nav-profil {
+  width: 155.50px;
+  height: 18.66px;
+  left: 95.81px;
+  top: 493.95px;
+  position: absolute;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: #0C8E63;
+  font-size: 22px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.44px;
+  word-wrap: break-word;
+}
+
+.icon-galeri-base {
+  width: 14.25px;
+  height: 9.54px;
+  left: 44.90px;
+  top: 292.14px;
+  position: absolute;
+  outline: 1px white solid;
+  outline-offset: -0.50px;
+}
+
+.icon-galeri-dot-1 {
+  width: 5.94px;
+  height: 7.48px;
+  left: 41.94px;
+  top: 288.40px;
+  position: absolute;
+  background: #F1F2EF;
+  border-radius: 9999px;
+}
+
+.icon-galeri-dot-2 {
+  width: 5.94px;
+  height: 7.48px;
+  left: 49.06px;
+  top: 284.66px;
+  position: absolute;
+  background: #F1F2EF;
+  border-radius: 9999px;
+}
+
+.icon-galeri-dot-3 {
+  width: 5.94px;
+  height: 7.48px;
+  left: 56.18px;
+  top: 288.40px;
+  position: absolute;
+  background: #F1F2EF;
+  border-radius: 9999px;
+}
+
+.icon-galeri-frame {
+  width: 31.73px;
+  height: 21.33px;
+  left: 35.52px;
+  top: 292.65px;
+  position: absolute;
+  outline: 1.50px #F1F2EF solid;
+  outline-offset: -0.75px;
+}
+
+.icon-testimoni-roof {
+  width: 18.41px;
+  height: 11.60px;
+  left: 53.93px;
+  top: 413.88px;
+  position: absolute;
+  transform: rotate(-180deg);
+  transform-origin: top left;
+  outline: 1.50px white solid;
+  outline-offset: -0.75px;
+}
+
+.icon-testimoni-person-1 {
+  width: 9.40px;
+  height: 11.84px;
+  left: 39.20px;
+  top: 387.30px;
+  position: absolute;
+  opacity: 0.60;
+  background: white;
+  border-radius: 9999px;
+}
+
+.icon-testimoni-person-2 {
+  width: 9.40px;
+  height: 11.84px;
+  left: 50.70px;
+  top: 387.30px;
+  position: absolute;
+  opacity: 0.60;
+  background: white;
+  border-radius: 9999px;
+}
+
+.icon-profil-roof {
+  width: 17.31px;
+  height: 10.91px;
+  left: 60.23px;
+  top: 515.28px;
+  position: absolute;
+  transform: rotate(-180deg);
+  transform-origin: top left;
+  outline: 1.50px #0D8F64 solid;
+  outline-offset: -0.75px;
+}
+
+.icon-profil-person {
+  width: 10.58px;
+  height: 13.33px;
+  left: 46.29px;
+  top: 488.62px;
+  position: absolute;
+  border-radius: 9999px;
+  border: 1.50px #0D8F64 solid;
+}
+
+.icon-dashboard-grid-1 {
+  width: 10.17px;
+  height: 9.12px;
+  left: 52.51px;
+  top: 184.07px;
+  position: absolute;
+  outline: 1.50px #F1F2EF solid;
+  outline-offset: -0.75px;
+}
+
+.icon-dashboard-grid-2 {
+  width: 10.17px;
+  height: 9.12px;
+  left: 38.04px;
+  top: 197.52px;
+  position: absolute;
+  outline: 1.50px #F1F2EF solid;
+  outline-offset: -0.75px;
+}
+
+.icon-dashboard-grid-3 {
+  width: 10.17px;
+  height: 9.12px;
+  left: 52.51px;
+  top: 197.52px;
+  position: absolute;
+  outline: 1.50px #F1F2EF solid;
+  outline-offset: -0.75px;
+}
+
+.icon-dashboard-grid-4 {
+  width: 10.17px;
+  height: 9.12px;
+  left: 38.04px;
+  top: 184.07px;
+  position: absolute;
+  outline: 1.50px #F1F2EF solid;
+  outline-offset: -0.75px;
+}
+
+.page-header {
+  width: 979.15px;
+  height: 50.91px;
+  left: 377.01px;
+  top: 83.16px;
+  position: absolute;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: #0A121B;
+  font-size: 52px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  letter-spacing: 1.04px;
+  word-wrap: break-word;
+}
+
+.profile-card {
+  width: 1406.30px;
+  height: 845.72px;
+  left: 426px;
+  top: 193.45px;
+  position: absolute;
+  background: white;
+  border-radius: 109px;
+  border: 1px black solid;
+}
+
+.profile-field {
+  position: absolute;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  line-height: 38.40px;
+  word-wrap: break-word;
+}
+
+.profile-label {
+  font-weight: 700;
+  color: black;
+}
+
+.profile-value {
+  font-weight: 400;
+  color: black;
+}
+
+.phone-label {
+  width: 297.84px;
+  left: 536.47px;
+  top: 274.32px;
+}
+
+.phone-value {
+  width: 390.48px;
+  left: 857.01px;
+  top: 274.32px;
+}
+
+.address-label {
+  width: 311.61px;
+  left: 540.99px;
+  top: 369.85px;
+}
+
+.address-value {
+  width: 778px;
+  left: 720.69px;
+  top: 361.85px;
+}
+
+.facebook-label {
+  width: 311.61px;
+  left: 536.19px;
+  top: 523.08px;
+}
+
+.facebook-value {
+  width: 778px;
+  left: 742.60px;
+  top: 523.08px;
+}
+
+.whatsapp-label {
+  width: 311.61px;
+  left: 537.39px;
+  top: 651.31px;
+}
+
+.whatsapp-value {
+  width: 778px;
+  left: 742.60px;
+  top: 651.31px;
+}
+
+.instagram-label {
+  width: 311.61px;
+  left: 545.79px;
+  top: 779.54px;
+}
+
+.instagram-value {
+  width: 778px;
+  left: 742.60px;
+  top: 779.54px;
+}
+
+.gmaps-label {
+  width: 311.61px;
+  left: 545.79px;
+  top: 910.03px;
+}
+
+.gmaps-value {
+  width: 778px;
+  left: 696.79px;
+  top: 910.03px;
+}
+
+.facebook-icon {
+  width: 48px;
+  height: 48px;
+  left: 536.19px;
+  top: 505.07px;
+  position: absolute;
+}
+
+.edit-button {
+  width: 199.57px;
+  height: 45.86px;
+  left: 1530.51px;
+  position: absolute;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: #718EBF;
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.edit-button-border {
+  width: 199.57px;
+  height: 45.86px;
+  left: 1530.51px;
+  position: absolute;
+  border-radius: 50px;
+  border: 1px #718EBF solid;
+}
+
+.edit-button-1 {
+  top: 261.83px;
+}
+
+.edit-button-2 {
+  top: 392.85px;
+}
+
+.edit-button-3 {
+  top: 523.87px;
+}
+
+.edit-button-4 {
+  top: 655.89px;
+}
+
+.edit-button-5 {
+  top: 786.91px;
+}
+
+.edit-button-6 {
+  top: 902.18px;
+}

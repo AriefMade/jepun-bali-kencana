@@ -1,0 +1,167 @@
+.dashboard-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: white;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+.main-content {
+  position: absolute;
+  left: 360px;
+  top: 0;
+  width: calc(100% - 360px);
+  height: 100%;
+  padding: 40px;
+}
+
+
+.page-header {
+  margin-bottom: 50px;
+}
+
+.page-title {
+  font-size: 52px;
+  font-weight: 600;
+  color: #0a121b;
+  letter-spacing: 1px;
+}
+
+
+.stats-grid {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 480px);
+  grid-gap: 40px;
+  margin-top: 20px;
+}
+
+
+.stat-card {
+  width: 480px;
+  height: 200px;
+  background: white;
+  border-radius: 36px;
+  border: 1px solid #009d54;
+  position: relative;
+  padding-left: 150px;
+  padding-top: 40px;
+}
+
+
+.stat-icon {
+  width: 96px;
+  height: 96px;
+  background: #d9d9d9;
+  border-radius: 20px;
+  position: absolute;
+  left: 30px;
+  top: 50px;
+}
+
+.stat-title {
+  font-size: 26px;
+  font-weight: 500;
+  color: #0a121b;
+}
+
+.stat-value {
+  font-size: 40px;
+  font-weight: 700;
+  color: #0a121b;
+  margin-top: 8px;
+}
+
+
+.product-statistic {
+  width: 540px;
+  height: 820px;
+  background: white;
+  border-radius: 36px;
+  border: 1px solid #0d9266;
+  position: absolute;
+  right: 40px;
+  top: 150px;
+  padding: 40px;
+}
+
+.product-title {
+  font-size: 36px;
+  font-weight: 600;
+  color: #0a121b;
+}
+
+.product-subtitle {
+  font-size: 22px;
+  color: #0a121b;
+  margin-top: 8px;
+}
+
+
+.pie-wrapper {
+  width: 395px;
+  height: 395px;
+  margin: 40px auto;
+  position: relative;
+}
+
+.pie-background {
+  width: 100%;
+  height: 100%;
+  background: #b8b8b8;
+  border-radius: 999px;
+  position: absolute;
+}
+
+.pie-overlay {
+  width: 100%;
+  height: 100%;
+  background: #009d54;
+  border-radius: 999px;
+  position: absolute;
+  clip-path: inset(0 0 40% 0);
+}
+
+
+.legend {
+  margin-top: 20px;
+}
+
+.legend-item {
+  display: grid;
+  grid-template-columns: 140px 60px 140px 80px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.legend-label {
+  font-size: 22px;
+  font-weight: 500;
+  color: #0a121b;
+}
+
+.legend-value {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.legend-bar {
+  width: 120px;
+  height: 26px;
+  border-radius: 20px;
+}
+
+.legend-bar-green {
+  background: #009d54;
+}
+
+.legend-bar-gray {
+  background: #b8b8b8;
+}
+
+.legend-percent {
+  font-size: 22px;
+  font-weight: 500;
+}
