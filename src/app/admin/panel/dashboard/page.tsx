@@ -1,9 +1,7 @@
 import "./dashboard.css";
-
 export default function DashboardPage() {
   return (
     <div className="dashboard-wrapper">
-
   {/* Konten utama */}
   <main className="main-content">
 
@@ -20,7 +18,7 @@ export default function DashboardPage() {
         <div className="stat-icon" />
         <div>
           <h2 className="stat-title">Kategori</h2>
-          <p className="stat-value">2</p>
+          <p className="stat-value">3</p>
         </div>
       </article>
 

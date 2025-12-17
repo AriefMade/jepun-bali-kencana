@@ -1,3 +1,4 @@
+import '@/src/app/admin/auth/login/page.css'
 export default function AuthLayout({
     children,
 }: {
@@ -5,22 +6,30 @@ export default function AuthLayout({
 }) {
     return (
 <div className="auth-wrapper">
-    <section className="form">
-        <h1>Hello Admin</h1>
-    <form>
-    <div style={{width: '100%', height: '100%', background: '#F3F3F3', borderRadius: 34}}> 
-        <input type="email" placeholder="Email" />
+    <div className="form" style={{display: 'flex', flexDirection: 'row', overflow: 'hidden'}}>
+        
+        <div style={{width: '53.5px', background: '#2B8663', borderRadius: '34px 0 0 34px'}}></div>
+        <div style={{flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '40px', padding: '40px'}}>
+
+            <aside className="auth-pict" style={{flex: 1}}>
+                <img src="/pana.png" alt="auth-image" style={{width: '100%', height: 'auto'}} />
+            </aside>
+            <div style={{flex: 1}}>
+                <text className='header'>Hello Admin</text>
+                <div style={{marginTop: '70px', display: 'flex', flexDirection: 'column', gap: '20px'}}>
+                    <div style={{width: '100%', height: '72.3px', background: '#F3F3F3', borderRadius: 34, padding: '0 20px'}}> 
+                        <input type="email" placeholder="Email" style={{width: '100%', height: '100%', border: 'none', background: 'transparent', outline: 'none'}} />
+                    </div>
+                    <div style={{width: '100%', height: '72.3px', background: '#F3F3F3', borderRadius: 34, padding: '0 20px'}}>
+                        <input type="password" placeholder="Password" style={{width: '100%', height: '100%', border: 'none', background: 'transparent', outline: 'none'}} />
+                    </div>
+                    <button type="submit" style={{width: '100%', height: '72.3px', background: '#2C8464', borderRadius: 34, border: 'none', cursor: 'pointer', marginTop: '70px'}}>
+                        <text className='text-btn'>Lets Start</text>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div style={{width: '100%', height: '100%', background: '#F3F3F3', borderRadius: 34}}>
-      <input type="password" placeholder="Password" />
-      </div>
-      <div style={{width: '100%', height: '100%', textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'rgba(255, 255, 255, 0.88)', fontSize: 23, fontFamily: 'Poppins', fontWeight: '600', letterSpacing: 0.46, wordWrap: 'break-word'}}>Lets Start</div>
-      <button type="submit">Lets Start</button>
-    </form>
-    <aside className="auth-pict">
-    <img src="/pana.png" alt="auth-image" />
-  </aside>
-  </section>
 </div>
 );
 }

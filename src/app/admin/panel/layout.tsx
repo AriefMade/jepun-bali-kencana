@@ -1,3 +1,5 @@
+import '@/src/app/admin/panel/layout.css'
+
 export default function AdminLayout({
   children,
 }: {
@@ -5,44 +7,33 @@ export default function AdminLayout({
 }) {
   return (
     <div className="admin-wrapper">
-       <aside className="sidebar">
-        <img className="sidebar-decoration-1" src="https://placehold.co/94x327" alt="" />
-        <img className="sidebar-decoration-2" src="https://placehold.co/121x544" alt="" />
-        <img className="sidebar-decoration-3" src="https://placehold.co/278x201" alt="" />
-        <nav>
-          <a href="/admin/dashboard">
-          <div className="icon-dashboard-grid-1" />
-          <div className="icon-dashboard-grid-2" />
-          <div className="icon-dashboard-grid-3" />
-          <div className="icon-dashboard-grid-4" />
-          <div className="nav-dashboard">Dashboard</div>
+      <aside className="sidebar">
+        <div className="sidebar-bg">
+          <img src="/admin/Layer 8.png" alt="" className="bg-1" />
+          <img src="/admin/Layer 18.png" alt="" className="bg-2" />
+          <img src="/admin/Layer 20.png" alt="" className="bg-3" />
+          <img src="/admin/Rhipsalis Garden.png" alt="" className="bg-4" />
+        <nav className="sidebar-menu">
+          <a href="/admin/panel/dashboard" className="menu-item active">
+            <div className="menu-icon dashboard-icon"></div>
+            <span>Dashboard</span>
           </a>
-        <a href="/admin/galeri">
-          <div className="icon-galeri-base" />
-          <div className="icon-galeri-dot-1" />
-          <div className="icon-galeri-dot-2" />
-          <div className="icon-galeri-dot-3" />
-          <div className="icon-galeri-frame" />
-          <div className="nav-galeri">Galeri</div>
-            </a>
-<a href="/admin/testimoni">
-          <div className="nav-item-active" />
-          <div className="icon-testimoni-roof" />
-          <div className="icon-testimoni-person-1" />
-          <div className="icon-testimoni-person-2" />
-          <div className="nav-testimoni">Testimoni</div>
-</a>
-        <a href="/admin/profil-usaha">
-          <div className="icon-profil-roof" />
-          <div className="icon-profil-person" />
-          <div className="nav-profil">Profil Usaha</div>
-        </a>
+          <a href="/admin/panel/galeri" className="menu-item">
+            <div className="menu-icon gallery-icon"></div>
+            <span>Galeri</span>
+          </a>
+          <a href="/admin/panel/testimoni" className="menu-item">
+            <div className="menu-icon testimoni-icon"></div>
+            <span>Testimoni</span>
+          </a>
+          <a href="/admin/panel/profil" className="menu-item">
+            <div className="menu-icon profil-icon"></div>
+            <span>Profil Usaha</span>
+          </a>
         </nav>
-
-        <button className="logout-button">Logout</button>
-        <div className="logout-border" />
+        <button className="logout-btn">Logout</button>
+        </div>
       </aside>
-
       <main className="admin-content">
         {children}
       </main>
