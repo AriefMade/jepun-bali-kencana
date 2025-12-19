@@ -1,14 +1,61 @@
-import "../styles/category.css"
-export default function CategorySection() {
+import Link from 'next/link';
+import Image from 'next/image';
+import '@/src/app/public/styles/category.css';
+
+export default function Category() {
   return (
-    <section id="category" className="category-wrapper">
-        <div className="category-title">Our Service Category</div>
-          <div className="background-tanaman"/>
-            <div className="background-tugu" />
-              <div className="text-tanaman">tanaman hias</div>
-               <img className="img-tanaman" src="/image 10.png" />
-                <div className="text-tugu">Tugu dan sanggah</div>
-                  <img className="img-tugu" src="/image 11.png" />
+    <section className="category-wrapper">
+      <h2 className="category-title">Kategori Produk Kami</h2>
+      
+      <div className="category-grid">
+        {/* Arsitektur Lanskap - Kartu Besar Kiri */}
+        <Link href="/public/project/overview-karya" className="category-card large">
+          <div className="category-content">
+            <div className="category-text">
+              Arsitektur<br/>Lanskap
+            </div>
+            <Image 
+              src="/image 9.png" 
+              alt="Arsitektur Lanskap"
+              className="category-image"
+              width={500}
+              height={600}
+            />
+          </div>
+        </Link>
+
+        {/* Tanaman Hias - Kartu Kanan Atas */}
+        <Link href="/public/tanaman-hias" className="category-card top-right">
+          <div className="category-content">
+            <div className="category-text">
+              Tanaman<br/>Hias
+            </div>
+            <Image 
+              src="/image 10.png" 
+              alt="Tanaman Hias"
+              className="category-image"
+              width={400}
+              height={400}
+            />
+          </div>
+        </Link>
+
+        {/* Ornamen Candi - Kartu Kanan Bawah */}
+        <Link href="/public/tugu-dan-sanggah" className="category-card bottom-right">
+          <div className="category-content">
+            <div className="category-text">
+              Tugu &<br/>Sanggah
+            </div>
+            <Image 
+              src="/image 11.png" 
+              alt="Ornamen Candi"
+              className="category-image"
+              width={350}
+              height={350}
+            />
+          </div>
+        </Link>
+      </div>
     </section>
   );
 }

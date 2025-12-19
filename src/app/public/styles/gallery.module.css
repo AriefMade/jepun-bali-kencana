@@ -25,6 +25,11 @@
   color: #637E59;
   font-weight: 500;
   cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.viewAll:hover {
+  color: #4a5f44;
 }
 
 .galleryGrid {
@@ -88,4 +93,114 @@
   font-weight: 500;
   margin-top: 12px;
   color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .gallerySection {
+    padding: 50px 60px;
+  }
+
+  .title {
+    font-size: 40px;
+  }
+
+  .viewAll {
+    font-size: 18px;
+    margin-top: 45px;
+  }
+
+  .card {
+    min-width: 500px;
+  }
+
+  .card:nth-child(even) {
+    margin-top: 100px;
+  }
+
+  .caption {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .gallerySection {
+    padding: 40px 30px;
+  }
+
+  .header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .viewAll {
+    margin-top: 0;
+    font-size: 16px;
+  }
+
+  .galleryGrid {
+    gap: 24px;
+  }
+
+  .card {
+    min-width: 400px;
+  }
+
+  .card:nth-child(even) {
+    margin-top: 60px;
+  }
+
+  .caption {
+    font-size: 18px;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallerySection {
+    padding: 30px 20px;
+  }
+
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  .viewAll {
+    font-size: 14px;
+    margin-top: 0;
+  }
+
+  .galleryGrid {
+    gap: 20px;
+  }
+
+  .card {
+    min-width: 280px;
+  }
+
+  .card:nth-child(even) {
+    margin-top: 40px;
+  }
+
+  .caption {
+    font-size: 16px;
+    margin-top: 8px;
+  }
+
+  .galleryGrid::-webkit-scrollbar {
+    height: 6px;
+  }
 }
