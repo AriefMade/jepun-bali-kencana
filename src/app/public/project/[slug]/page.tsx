@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Calendar, Maximize2, User, Loader2 } from 'lucide-react';
-import '../detail-karya/detail-karya.css';
+import './detail-karya.css';
 
 type ProjectDetail = {
   id: number;
@@ -59,25 +59,30 @@ export default function DetailKarya() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProject = async () => {
-      try {
-        const res = await fetch(`/api/projects/slug/${slug}`);
-        
-        if (!res.ok) {
-          throw new Error('Project tidak ditemukan');
-        }
-
-        const data = await res.json();
-        setProject(data.project);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  const fetchProject = async () => {
+    try {
+      console.log('Fetching slug:', slug); // Debug
+      const res = await fetch(`/api/projects/${slug}`);
+      
+      console.log('Response status:', res.status); // Debug
+      
+      if (!res.ok) {
+        throw new Error('Project tidak ditemukan');
       }
-    };
 
-    fetchProject();
-  }, [slug]);
+      const data = await res.json();
+      console.log('Project data:', data); // Debug
+      setProject(data.project);
+    } catch (err: any) {
+      console.error('Fetch error:', err); // Debug
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProject();
+}, [slug]);
 
   if (loading) {
     return (

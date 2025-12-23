@@ -1,9 +1,24 @@
+import { Star } from 'lucide-react';
+
 interface TestimonialCardProps {
   name: string;
   message: string;
+  rating: number;
 }
 
-export default function TestimonialCard({ name, message }: TestimonialCardProps) {
+export default function TestimonialCard({ name, message, rating }: TestimonialCardProps) {
+  const renderStars = () => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <Star 
+        key={i} 
+        size={14} 
+        fill={i < rating ? '#fbbf24' : 'none'}
+        color={i < rating ? '#fbbf24' : '#d1d5db'}
+        style={{ display: 'inline-block', marginRight: '2px' }}
+      />
+    ));
+  };
+
   return (
     <div
       style={{
@@ -39,16 +54,22 @@ export default function TestimonialCard({ name, message }: TestimonialCardProps)
         </p>
       </div>
 
-      <p
-        style={{
-          marginTop: 20,
-          color: "#67646A",
-          fontSize: 14,
-          fontWeight: 500
-        }}
-      >
-        {name}
-      </p>
+      <div>
+        <p
+          style={{
+            marginTop: 20,
+            marginBottom: 6,
+            color: "#67646A",
+            fontSize: 14,
+            fontWeight: 500
+          }}
+        >
+          {name}
+        </p>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {renderStars()}
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,14 +1,42 @@
+'use client'
 import TestimonialCard from './testimonialCard';
 import '../../styles/testimony.css';
+import { useState, useEffect } from 'react';
 
-const data = [
-  { id: 1, name: "Ayu", message: "Tanaman bagus, rapi, natural!" },
-  { id: 2, name: "Made", message: "Layanannya ramah dan detail." },
-  { id: 3, name: "Wayan", message: "Hasilnya sesuai harapan!" },
-  { id: 4, name: "Komang", message: "Pengerjaan cepat dan bersih." }
-];
+type Testimonial = {
+  id: number;
+  name: string;
+  message: string;
+  rating: number;
+  category: string | null;
+  avatar: string | null;
+  date: Date;
+};
 
 export default function TestimonySection() {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
+
+  const fetchTestimonials = async () => {
+    try {
+      const res = await fetch('/api/testimonials');
+      const data = await res.json();
+      
+      if (data.success) {
+        // Ambil 4 testimoni pertama untuk ditampilkan
+        setTestimonials(data.testimonials.slice(0, 4));
+      }
+    } catch (error) {
+      console.error('Error fetching testimonials:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="testimony-section">
       <div className="testimony-container">
@@ -27,13 +55,24 @@ export default function TestimonySection() {
 
           <div className="testimony-cards-wrapper">
             <div className="testimony-cards-grid">
-              {data.map((item) => (
-                <TestimonialCard
-                  key={item.id}
-                  name={item.name}
-                  message={item.message}
-                />
-              ))}
+              {loading ? (
+                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem' }}>
+                  Loading...
+                </div>
+              ) : testimonials.length === 0 ? (
+                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem', color: '#67646A' }}>
+                  Belum ada testimoni
+                </div>
+              ) : (
+                testimonials.map((item) => (
+                  <TestimonialCard
+                    key={item.id}
+                    name={item.name}
+                    message={item.message}
+                    rating={item.rating}
+                  />
+                ))
+              )}
             </div>
           </div>
         </div>

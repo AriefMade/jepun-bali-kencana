@@ -1,33 +1,119 @@
 'use client'
 import './profil.css';
 import { Phone, MapPin, Facebook, MessageCircle, Instagram, MapPinned, Edit2, X, Save } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type ProfileData = {
+  id: number;
   phone: string;
   address: string;
-  facebook: string;
-  whatsapp: string;
-  instagram: string;
-  gmaps: string;
+  facebook: string | null;
+  whatsapp: string | null;
+  instagram: string | null;
+  gmaps: string | null;
 };
 
 export default function ProfilUsahaPage() {
+  const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editField, setEditField] = useState<string>('');
-  const [profileData, setProfileData] = useState<ProfileData>({
-    phone: '+62 878-5605-2262',
-    address: 'Pemaron, Kec. Buleleng, Kabupaten Buleleng, Bali',
-    facebook: 'https://facebook.com/jepunbalikencana',
-    whatsapp: 'https://wa.me/6287856052262',
-    instagram: 'https://instagram.com/jepunbalikencana',
-    gmaps: 'https://maps.google.com/?q=jepun+bali+kencana'
-  });
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [editValue, setEditValue] = useState('');
+
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
+
+  const fetchProfileData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/profile-data', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        setProfileData(data.profileData);
+      }
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleEdit = (field: string) => {
+    if (!profileData) return;
     setEditField(field);
+    setEditValue((profileData[field as keyof ProfileData] as string) || '');
     setShowEditModal(true);
   };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profileData) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/profile-data/${profileData.id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...profileData,
+          [editField]: editValue
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setProfileData(data.profileData);
+        setShowEditModal(false);
+        alert('Data profil berhasil diupdate!');
+      } else {
+        alert(data.error || 'Gagal update data profil');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Terjadi kesalahan saat update data profil');
+    }
+  };
+
+  const getFieldLabel = (field: string): string => {
+    const labels: { [key: string]: string } = {
+      phone: 'No Handphone',
+      address: 'Alamat',
+      facebook: 'Facebook',
+      whatsapp: 'WhatsApp',
+      instagram: 'Instagram',
+      gmaps: 'Google Maps'
+    };
+    return labels[field] || field;
+  };
+
+  if (loading) {
+    return (
+      <div className="profil-container">
+        <div style={{ textAlign: 'center', padding: '3rem' }}>
+          Loading...
+        </div>
+      </div>
+    );
+  }
+
+  if (!profileData) {
+    return (
+      <div className="profil-container">
+        <div style={{ textAlign: 'center', padding: '3rem', color: '#6b7280' }}>
+          Data profil tidak ditemukan
+        </div>
+      </div>
+    );
+  }
 
   const profileFields = [
     { 
@@ -47,28 +133,28 @@ export default function ProfilUsahaPage() {
     { 
       id: 'facebook', 
       label: 'Facebook', 
-      value: profileData.facebook, 
+      value: profileData.facebook || '-', 
       icon: <Facebook size={24} />,
       color: '#1877f2'
     },
     { 
       id: 'whatsapp', 
       label: 'WhatsApp', 
-      value: profileData.whatsapp, 
+      value: profileData.whatsapp || '-', 
       icon: <MessageCircle size={24} />,
       color: '#25d366'
     },
     { 
       id: 'instagram', 
       label: 'Instagram', 
-      value: profileData.instagram, 
+      value: profileData.instagram || '-', 
       icon: <Instagram size={24} />,
       color: '#e4405f'
     },
     { 
       id: 'gmaps', 
       label: 'Google Maps', 
-      value: profileData.gmaps, 
+      value: profileData.gmaps || '-', 
       icon: <MapPinned size={24} />,
       color: '#ea4335'
     },
@@ -114,23 +200,22 @@ export default function ProfilUsahaPage() {
               </button>
             </div>
 
-            <form className="modal-form" onSubmit={(e) => {
-              e.preventDefault();
-              setShowEditModal(false);
-            }}>
+            <form className="modal-form" onSubmit={handleSubmit}>
               <div className="form-group">
-                <label>{profileFields.find(f => f.id === editField)?.label}</label>
+                <label>{getFieldLabel(editField)}</label>
                 {editField === 'address' ? (
                   <textarea 
-                    defaultValue={profileData[editField as keyof ProfileData]}
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
                     rows={4}
-                    placeholder={`Masukkan ${profileFields.find(f => f.id === editField)?.label}`}
+                    placeholder={`Masukkan ${getFieldLabel(editField)}`}
                   />
                 ) : (
                   <input 
                     type="text" 
-                    defaultValue={profileData[editField as keyof ProfileData]}
-                    placeholder={`Masukkan ${profileFields.find(f => f.id === editField)?.label}`}
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    placeholder={`Masukkan ${getFieldLabel(editField)}`}
                   />
                 )}
               </div>

@@ -55,7 +55,7 @@ export default function ProjectsAdminPage() {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`/api/projects/${id}`, {
+      const res = await fetch(`/api/projects/id/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -82,7 +82,7 @@ export default function ProjectsAdminPage() {
       const token = localStorage.getItem('token');
       const project = projects.find(p => p.id === id);
       
-      const res = await fetch(`/api/projects/${id}`, {
+      const res = await fetch(`/api/projects/id/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -258,6 +258,7 @@ function ProjectForm({ projectId, onClose }: { projectId: number | null; onClose
   });
 
   const [activeTab, setActiveTab] = useState('basic');
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (projectId) {
@@ -267,7 +268,7 @@ function ProjectForm({ projectId, onClose }: { projectId: number | null; onClose
 
   const fetchProject = async () => {
     try {
-      const res = await fetch(`/api/projects/${projectId}`);
+      const res = await fetch(`/api/projects/id/${projectId}`);
       const data = await res.json();
       const p = data.project;
       setFormData({
@@ -310,7 +311,7 @@ function ProjectForm({ projectId, onClose }: { projectId: number | null; onClose
     e.preventDefault();
     
     const method = projectId ? 'PUT' : 'POST';
-    const url = projectId ? `/api/projects/${projectId}` : '/api/projects';
+    const url = projectId ? `/api/projects/id/${projectId}` : '/api/projects';
 
     try {
       const token = localStorage.getItem('token');
@@ -361,488 +362,654 @@ function ProjectForm({ projectId, onClose }: { projectId: number | null; onClose
     setFormData({ ...formData, [field]: newArray });
   };
 
+  // Fungsi upload image
+  const handleImageUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: 'heroImage' | 'thumbnailImage' | 'beforeImage' | 'sketchImage'
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validasi client-side
+    if (!file.type.startsWith('image/')) {
+      alert('Hanya file gambar yang diperbolehkan');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Ukuran file maksimal 5MB');
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setFormData(prev => ({
+          ...prev,
+          [field]: data.imageUrl
+        }));
+        alert('Image berhasil diupload!');
+      } else {
+        alert(data.error || 'Upload gagal');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Gagal upload image');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="project-form">
       <div className="form-header">
-        <h2>{projectId   ? 'Edit Project' : 'Tambah Project Baru'}</h2>
-        <button type="button" onClick={onClose} className="btn-close">✕</button>
+        <h2>{projectId ? 'Edit Project' : 'Tambah Project Baru'}</h2>
+        <button type="button" onClick={onClose} className="btn-close">×</button>
       </div>
 
       {/* Tabs */}
       <div className="form-tabs">
-        <button
-          type="button"
-          className={`tab ${activeTab === 'basic' ? 'active' : ''}Id`}
-          onClick={() => setActiveTab('basic')}
-        >
-          Informasi Dasar
-        </button>
-        <button
-          type="button"
-          className={`tab ${activeTab === 'background' ? 'active' : ''}`}
-          onClick={() => setActiveTab('background')}
-        >
-          Latar Belakang
-        </button>
-        <button
-          type="button"
-          className={`tab ${activeTab === 'design' ? 'active' : ''}`}
-          onClick={() => setActiveTab('design')}
-        >
-          Pendekatan Desain
-        </button>
-        <button
-          type="button"
-          className={`tab ${activeTab === 'process' ? 'active' : ''}`}
-          onClick={() => setActiveTab('process')}
-        >
-          Proses
-        </button>
-        <button
-          type="button"
-          className={`tab ${activeTab === 'results' ? 'active' : ''}`}
-          onClick={() => setActiveTab('results')}
-        >
-          Hasil & Testimoni
-        </button>
-      </div>
+            <button
+              type="button"
+              className={`tab ${activeTab === 'basic' ? 'active' : ''}`}
+              onClick={() => setActiveTab('basic')}
+            >
+              Info Dasar
+            </button>
+            <button
+              type="button"
+              className={`tab ${activeTab === 'images' ? 'active' : ''}`}
+              onClick={() => setActiveTab('images')}
+            >
+              Gambar
+            </button>
+            <button
+              type="button"
+              className={`tab ${activeTab === 'background' ? 'active' : ''}`}
+              onClick={() => setActiveTab('background')}
+            >
+              Latar Belakang
+            </button>
+            <button
+              type="button"
+              className={`tab ${activeTab === 'design' ? 'active' : ''}`}
+              onClick={() => setActiveTab('design')}
+            >
+              Pendekatan Desain
+            </button>
+            <button
+              type="button"
+              className={`tab ${activeTab === 'process' ? 'active' : ''}`}
+              onClick={() => setActiveTab('process')}
+            >
+              Proses
+            </button>
+            <button
+              type="button"
+              className={`tab ${activeTab === 'results' ? 'active' : ''}`}
+              onClick={() => setActiveTab('results')}
+            >
+              Hasil & Testimoni
+            </button>
+          </div>
 
-      <div className="form-body">
-        {/* Tab: Basic Info */}
-        {activeTab === 'basic' && (
-          <div className="form-section">
-            <div className="form-group">
-              <label>Judul Project *</label>
-              <input
-                type="text"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="Contoh: Taman Privat Villa Sanur"
-                required
-              />
-            </div>
-
-            <div className="form-row">
+          {/* Tab: Info Dasar */}
+          {activeTab === 'basic' && (
+            <div className="form-body">
+              <div className="form-section">
               <div className="form-group">
-                <label>Kategori *</label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                <label>Judul Project *</label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  placeholder="Contoh: Taman Privat Villa Sanur"
                   required
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Kategori *</label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    required
+                  >
+                    <option value="Taman Hunian">Taman Hunian</option>
+                    <option value="Ruang Publik">Ruang Publik</option>
+                    <option value="Komersial">Komersial</option>
+                    <option value="Kawasan Suci">Kawasan Suci</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Tipe Klien *</label>
+                  <select
+                    value={formData.clientType}
+                    onChange={(e) => setFormData({ ...formData, clientType: e.target.value })}
+                    required
+                  >
+                    <option value="Pribadi">Pribadi</option>
+                    <option value="Institusi">Institusi</option>
+                    <option value="Komersial">Komersial</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Lokasi *</label>
+                  <input
+                    type="text"
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    placeholder="Contoh: Sanur, Bali"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Luas Area *</label>
+                  <input
+                    type="text"
+                    value={formData.area}
+                    onChange={(e) => setFormData({ ...formData, area: e.target.value })}
+                    placeholder="Contoh: 450 m²"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Durasi Pengerjaan *</label>
+                  <input
+                    type="text"
+                    value={formData.duration}
+                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                    placeholder="Contoh: 3 bulan"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Tahun *</label>
+                  <input
+                    type="text"
+                    value={formData.year}
+                    onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                    placeholder="2024"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Budget (opsional)</label>
+                <input
+                  type="text"
+                  value={formData.budget}
+                  onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                  placeholder="Contoh: Rp 150-200 juta"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Hero Image URL *</label>
+                <input
+                  type="text"
+                  value={formData.heroImage}
+                  onChange={(e) => setFormData({ ...formData, heroImage: e.target.value })}
+                  placeholder="/projects/nama-project-hero.jpg"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Thumbnail Image URL *</label>
+                <input
+                  type="text"
+                  value={formData.thumbnailImage}
+                  onChange={(e) => setFormData({ ...formData, thumbnailImage: e.target.value })}
+                  placeholder="/projects/nama-project-thumb.jpg"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Before Image URL (opsional)</label>
+                <input
+                  type="text"
+                  value={formData.beforeImage}
+                  onChange={(e) => setFormData({ ...formData, beforeImage: e.target.value })}
+                  placeholder="/projects/nama-project-before.jpg"
+                />
+              </div>
+
+              <div className="form-group-checkbox">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={formData.isPublished}
+                    onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
+                  />
+                  Publish project (tampilkan di website)
+                </label>
+              </div>
+
+              <div className="form-group-checkbox">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={formData.isFeatured}
+                    onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
+                  />
+                  Tandai sebagai Featured
+                </label>
+              </div>
+            </div>
+            </div>
+          )}
+
+          {/* Tab: Gambar - DENGAN FILE UPLOAD */}
+          {activeTab === 'images' && (
+            <div className="form-body">
+            <div className="form-section">
+              <h3>Gambar Project</h3>
+
+              {/* Hero Image */}
+              <div className="form-group">
+                <label>Hero Image *</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'heroImage')}
+                  disabled={uploading}
+                />
+                {formData.heroImage && (
+                  <div className="image-preview">
+                    <img src={formData.heroImage} alt="Hero Preview" />
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, heroImage: '' })}
+                      className="remove-image-btn"
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Thumbnail Image */}
+              <div className="form-group">
+                <label>Thumbnail Image *</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'thumbnailImage')}
+                  disabled={uploading}
+                />
+                {formData.thumbnailImage && (
+                  <div className="image-preview">
+                    <img src={formData.thumbnailImage} alt="Thumbnail Preview" />
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, thumbnailImage: '' })}
+                      className="remove-image-btn"
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Before Image */}
+              <div className="form-group">
+                <label>Before Image</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'beforeImage')}
+                  disabled={uploading}
+                />
+                {formData.beforeImage && (
+                  <div className="image-preview">
+                    <img src={formData.beforeImage} alt="Before Preview" />
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, beforeImage: '' })}
+                      className="remove-image-btn"
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Sketch Image */}
+              <div className="form-group">
+                <label>Sketch Image</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'sketchImage')}
+                  disabled={uploading}
+                />
+                {formData.sketchImage && (
+                  <div className="image-preview">
+                    <img src={formData.sketchImage} alt="Sketch Preview" />
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, sketchImage: '' })}
+                      className="remove-image-btn"
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {uploading && <p className="upload-status">Uploading...</p>}
+            </div>
+            </div>
+          )}
+
+          {/* Tab: Background */}
+          {activeTab === 'background' && (
+            <div className="form-body">
+            <div className="form-section">
+              <div className="form-group">
+                <label>Kondisi Awal Tapak *</label>
+                <textarea
+                  value={formData.initialCondition}
+                  onChange={(e) => setFormData({ ...formData, initialCondition: e.target.value })}
+                  placeholder="Deskripsikan kondisi awal lokasi sebelum dikerjakan..."
+                  rows={4}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Permasalahan Utama *</label>
+                {formData.mainChallenges.map((challenge, index) => (
+                  <div key={index} className="array-input">
+                    <input
+                      type="text"
+                      value={challenge}
+                      onChange={(e) => updateArrayItem('mainChallenges', index, e.target.value)}
+                      placeholder={`Tantangan ${index + 1}`}
+                    />
+                    {formData.mainChallenges.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeArrayItem('mainChallenges', index)}
+                        className="btn-remove"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => addArrayItem('mainChallenges')}
+                  className="btn-add-item"
                 >
-                  <option value="Taman Hunian">Taman Hunian</option>
-                  <option value="Ruang Publik">Ruang Publik</option>
-                  <option value="Komersial">Komersial</option>
-                  <option value="Kawasan Suci">Kawasan Suci</option>
-                </select>
+                  + Tambah Tantangan
+                </button>
               </div>
 
               <div className="form-group">
-                <label>Tipe Klien *</label>
-                <select
-                  value={formData.clientType}
-                  onChange={(e) => setFormData({ ...formData, clientType: e.target.value })}
-                  required
+                <label>Kebutuhan Klien *</label>
+                {formData.clientNeeds.map((need, index) => (
+                  <div key={index} className="array-input">
+                    <input
+                      type="text"
+                      value={need}
+                      onChange={(e) => updateArrayItem('clientNeeds', index, e.target.value)}
+                      placeholder={`Kebutuhan ${index + 1}`}
+                    />
+                    {formData.clientNeeds.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeArrayItem('clientNeeds', index)}
+                        className="btn-remove"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => addArrayItem('clientNeeds')}
+                  className="btn-add-item"
                 >
-                  <option value="Pribadi">Pribadi</option>
-                  <option value="Institusi">Institusi</option>
-                  <option value="Komersial">Komersial</option>
-                </select>
+                  + Tambah Kebutuhan
+                </button>
               </div>
             </div>
+            </div>
+          )}
 
-            <div className="form-row">
+          {/* Tab: Design Approach */}
+          {activeTab === 'design' && (
+            <div className="form-body">
+            <div className="form-section">
               <div className="form-group">
-                <label>Lokasi *</label>
-                <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  placeholder="Contoh: Sanur, Bali"
+                <label>Analisis Tapak *</label>
+                <textarea
+                  value={formData.siteAnalysis}
+                  onChange={(e) => setFormData({ ...formData, siteAnalysis: e.target.value })}
+                  placeholder="Jelaskan proses analisis kondisi tapak..."
+                  rows={3}
                   required
                 />
               </div>
 
               <div className="form-group">
-                <label>Luas Area *</label>
-                <input
-                  type="text"
-                  value={formData.area}
-                  onChange={(e) => setFormData({ ...formData, area: e.target.value })}
-                  placeholder="Contoh: 450 m²"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
-                <label>Durasi Pengerjaan *</label>
-                <input
-                  type="text"
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                  placeholder="Contoh: 3 bulan"
+                <label>Konsep Desain *</label>
+                <textarea
+                  value={formData.designConcept}
+                  onChange={(e) => setFormData({ ...formData, designConcept: e.target.value })}
+                  placeholder="Deskripsikan konsep utama desain..."
+                  rows={3}
                   required
                 />
               </div>
 
               <div className="form-group">
-                <label>Tahun *</label>
+                <label>Strategi Zoning *</label>
+                <textarea
+                  value={formData.zoning}
+                  onChange={(e) => setFormData({ ...formData, zoning: e.target.value })}
+                  placeholder="Jelaskan pembagian zona dan fungsinya..."
+                  rows={3}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Pemilihan Tanaman *</label>
+                <textarea
+                  value={formData.plantSelection}
+                  onChange={(e) => setFormData({ ...formData, plantSelection: e.target.value })}
+                  placeholder="Jelaskan jenis tanaman yang dipilih dan alasannya..."
+                  rows={3}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Integrasi Unsur Budaya (opsional)</label>
+                <textarea
+                  value={formData.culturalIntegration}
+                  onChange={(e) => setFormData({ ...formData, culturalIntegration: e.target.value })}
+                  placeholder="Jelaskan bagaimana unsur budaya lokal diintegrasikan..."
+                  rows={3}
+                />
+              </div>
+            </div>
+            </div>
+          )}
+
+          {/* Tab: Process */}
+          {activeTab === 'process' && (
+            <div className="form-body">
+            <div className="form-section">
+              <div className="form-group">
+                <label>Sketch Image URL (opsional)</label>
                 <input
                   type="text"
-                  value={formData.year}
-                  onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                  placeholder="2024"
+                  value={formData.sketchImage}
+                  onChange={(e) => setFormData({ ...formData, sketchImage: e.target.value })}
+                  placeholder="/projects/nama-project-sketch.jpg"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Tahapan Konstruksi *</label>
+                {formData.constructionSteps.map((step, index) => (
+                  <div key={index} className="array-input">
+                    <textarea
+                      value={step}
+                      onChange={(e) => updateArrayItem('constructionSteps', index, e.target.value)}
+                      placeholder={`Tahap ${index + 1}`}
+                      rows={2}
+                    />
+                    {formData.constructionSteps.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeArrayItem('constructionSteps', index)}
+                        className="btn-remove"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => addArrayItem('constructionSteps')}
+                  className="btn-add-item"
+                >
+                  + Tambah Tahapan
+                </button>
+              </div>
+
+              <div className="form-group">
+                <label>Proses Penanaman *</label>
+                <textarea
+                  value={formData.plantingProcess}
+                  onChange={(e) => setFormData({ ...formData, plantingProcess: e.target.value })}
+                  placeholder="Jelaskan proses penanaman dan finishing..."
+                  rows={4}
                   required
                 />
               </div>
             </div>
-
-            <div className="form-group">
-              <label>Budget (opsional)</label>
-              <input
-                type="text"
-                value={formData.budget}
-                onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                placeholder="Contoh: Rp 150-200 juta"
-              />
             </div>
+          )}
 
-            <div className="form-group">
-              <label>Hero Image URL *</label>
-              <input
-                type="text"
-                value={formData.heroImage}
-                onChange={(e) => setFormData({ ...formData, heroImage: e.target.value })}
-                placeholder="/projects/nama-project-hero.jpg"
-                required
-              />
-            </div>
+          {/* Tab: Results */}
+          {activeTab === 'results' && (
+            <div className="form-body">
+            <div className="form-section">
+              <div className="form-group">
+                <label>Manfaat Fungsional *</label>
+                {formData.functionalBenefits.map((benefit, index) => (
+                  <div key={index} className="array-input">
+                    <input
+                      type="text"
+                      value={benefit}
+                      onChange={(e) => updateArrayItem('functionalBenefits', index, e.target.value)}
+                      placeholder={`Manfaat ${index + 1}`}
+                    />
+                    {formData.functionalBenefits.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeArrayItem('functionalBenefits', index)}
+                        className="btn-remove"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => addArrayItem('functionalBenefits')}
+                  className="btn-add-item"
+                >
+                  + Tambah Manfaat
+                </button>
+              </div>
 
-            <div className="form-group">
-              <label>Thumbnail Image URL *</label>
-              <input
-                type="text"
-                value={formData.thumbnailImage}
-                onChange={(e) => setFormData({ ...formData, thumbnailImage: e.target.value })}
-                placeholder="/projects/nama-project-thumb.jpg"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Before Image URL (opsional)</label>
-              <input
-                type="text"
-                value={formData.beforeImage}
-                onChange={(e) => setFormData({ ...formData, beforeImage: e.target.value })}
-                placeholder="/projects/nama-project-before.jpg"
-              />
-            </div>
-
-            <div className="form-group-checkbox">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={formData.isPublished}
-                  onChange={(e) => setFormData({ ...formData, isPublished: e.target.checked })}
+              <div className="form-group">
+                <label>Nilai Estetika *</label>
+                <textarea
+                  value={formData.aestheticValue}
+                  onChange={(e) => setFormData({ ...formData, aestheticValue: e.target.value })}
+                  placeholder="Jelaskan dampak estetika dari hasil akhir..."
+                  rows={3}
+                  required
                 />
-                Publish project (tampilkan di website)
-              </label>
-            </div>
+              </div>
 
-            <div className="form-group-checkbox">
-              <label>
+              <h3 className="subsection-title">Testimoni Klien (opsional)</h3>
+
+              <div className="form-group">
+                <label>Nama Klien</label>
                 <input
-                  type="checkbox"
-                  checked={formData.isFeatured}
-                  onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
+                  type="text"
+                  value={formData.testimonialName}
+                  onChange={(e) => setFormData({ ...formData, testimonialName: e.target.value })}
+                  placeholder="Contoh: Bapak Made Suteja"
                 />
-                Tandai sebagai Featured
-              </label>
+              </div>
+
+              <div className="form-group">
+                <label>Role/Jabatan</label>
+                <input
+                  type="text"
+                  value={formData.testimonialRole}
+                  onChange={(e) => setFormData({ ...formData, testimonialRole: e.target.value })}
+                  placeholder="Contoh: Pemilik Villa"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Pesan Testimoni</label>
+                <textarea
+                  value={formData.testimonialMessage}
+                  onChange={(e) => setFormData({ ...formData, testimonialMessage: e.target.value })}
+                  placeholder="Kutipan testimoni dari klien..."
+                  rows={4}
+                />
+              </div>
             </div>
+            </div>
+          )}
+          <div className="form-actions">
+            <button type="button" onClick={onClose} className="btn-cancel">
+              Batal
+            </button>
+            <button type="submit" className="btn-primary" disabled={uploading}>
+              {uploading ? 'Uploading...' : (projectId ? 'Update Project' : 'Simpan Project')}
+            </button>
           </div>
-        )}
-
-        {/* Tab: Background */}
-        {activeTab === 'background' && (
-          <div className="form-section">
-            <div className="form-group">
-              <label>Kondisi Awal Tapak *</label>
-              <textarea
-                value={formData.initialCondition}
-                onChange={(e) => setFormData({ ...formData, initialCondition: e.target.value })}
-                placeholder="Deskripsikan kondisi awal lokasi sebelum dikerjakan..."
-                rows={4}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Permasalahan Utama *</label>
-              {formData.mainChallenges.map((challenge, index) => (
-                <div key={index} className="array-input">
-                  <input
-                    type="text"
-                    value={challenge}
-                    onChange={(e) => updateArrayItem('mainChallenges', index, e.target.value)}
-                    placeholder={`Tantangan ${index + 1}`}
-                  />
-                  {formData.mainChallenges.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem('mainChallenges', index)}
-                      className="btn-remove"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => addArrayItem('mainChallenges')}
-                className="btn-add-item"
-              >
-                + Tambah Tantangan
-              </button>
-            </div>
-
-            <div className="form-group">
-              <label>Kebutuhan Klien *</label>
-              {formData.clientNeeds.map((need, index) => (
-                <div key={index} className="array-input">
-                  <input
-                    type="text"
-                    value={need}
-                    onChange={(e) => updateArrayItem('clientNeeds', index, e.target.value)}
-                    placeholder={`Kebutuhan ${index + 1}`}
-                  />
-                  {formData.clientNeeds.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem('clientNeeds', index)}
-                      className="btn-remove"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => addArrayItem('clientNeeds')}
-                className="btn-add-item"
-              >
-                + Tambah Kebutuhan
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Tab: Design Approach */}
-        {activeTab === 'design' && (
-          <div className="form-section">
-            <div className="form-group">
-              <label>Analisis Tapak *</label>
-              <textarea
-                value={formData.siteAnalysis}
-                onChange={(e) => setFormData({ ...formData, siteAnalysis: e.target.value })}
-                placeholder="Jelaskan proses analisis kondisi tapak..."
-                rows={3}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Konsep Desain *</label>
-              <textarea
-                value={formData.designConcept}
-                onChange={(e) => setFormData({ ...formData, designConcept: e.target.value })}
-                placeholder="Deskripsikan konsep utama desain..."
-                rows={3}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Strategi Zoning *</label>
-              <textarea
-                value={formData.zoning}
-                onChange={(e) => setFormData({ ...formData, zoning: e.target.value })}
-                placeholder="Jelaskan pembagian zona dan fungsinya..."
-                rows={3}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Pemilihan Tanaman *</label>
-              <textarea
-                value={formData.plantSelection}
-                onChange={(e) => setFormData({ ...formData, plantSelection: e.target.value })}
-                placeholder="Jelaskan jenis tanaman yang dipilih dan alasannya..."
-                rows={3}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Integrasi Unsur Budaya (opsional)</label>
-              <textarea
-                value={formData.culturalIntegration}
-                onChange={(e) => setFormData({ ...formData, culturalIntegration: e.target.value })}
-                placeholder="Jelaskan bagaimana unsur budaya lokal diintegrasikan..."
-                rows={3}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Tab: Process */}
-        {activeTab === 'process' && (
-          <div className="form-section">
-            <div className="form-group">
-              <label>Sketch Image URL (opsional)</label>
-              <input
-                type="text"
-                value={formData.sketchImage}
-                onChange={(e) => setFormData({ ...formData, sketchImage: e.target.value })}
-                placeholder="/projects/nama-project-sketch.jpg"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Tahapan Konstruksi *</label>
-              {formData.constructionSteps.map((step, index) => (
-                <div key={index} className="array-input">
-                  <textarea
-                    value={step}
-                    onChange={(e) => updateArrayItem('constructionSteps', index, e.target.value)}
-                    placeholder={`Tahap ${index + 1}`}
-                    rows={2}
-                  />
-                  {formData.constructionSteps.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem('constructionSteps', index)}
-                      className="btn-remove"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => addArrayItem('constructionSteps')}
-                className="btn-add-item"
-              >
-                + Tambah Tahapan
-              </button>
-            </div>
-
-            <div className="form-group">
-              <label>Proses Penanaman *</label>
-              <textarea
-                value={formData.plantingProcess}
-                onChange={(e) => setFormData({ ...formData, plantingProcess: e.target.value })}
-                placeholder="Jelaskan proses penanaman dan finishing..."
-                rows={4}
-                required
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Tab: Results */}
-        {activeTab === 'results' && (
-          <div className="form-section">
-            <div className="form-group">
-              <label>Manfaat Fungsional *</label>
-              {formData.functionalBenefits.map((benefit, index) => (
-                <div key={index} className="array-input">
-                  <input
-                    type="text"
-                    value={benefit}
-                    onChange={(e) => updateArrayItem('functionalBenefits', index, e.target.value)}
-                    placeholder={`Manfaat ${index + 1}`}
-                  />
-                  {formData.functionalBenefits.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem('functionalBenefits', index)}
-                      className="btn-remove"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => addArrayItem('functionalBenefits')}
-                className="btn-add-item"
-              >
-                + Tambah Manfaat
-              </button>
-            </div>
-
-            <div className="form-group">
-              <label>Nilai Estetika *</label>
-              <textarea
-                value={formData.aestheticValue}
-                onChange={(e) => setFormData({ ...formData, aestheticValue: e.target.value })}
-                placeholder="Jelaskan dampak estetika dari hasil akhir..."
-                rows={3}
-                required
-              />
-            </div>
-
-            <h3 className="subsection-title">Testimoni Klien (opsional)</h3>
-
-            <div className="form-group">
-              <label>Nama Klien</label>
-              <input
-                type="text"
-                value={formData.testimonialName}
-                onChange={(e) => setFormData({ ...formData, testimonialName: e.target.value })}
-                placeholder="Contoh: Bapak Made Suteja"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Role/Jabatan</label>
-              <input
-                type="text"
-                value={formData.testimonialRole}
-                onChange={(e) => setFormData({ ...formData, testimonialRole: e.target.value })}
-                placeholder="Contoh: Pemilik Villa"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Pesan Testimoni</label>
-              <textarea
-                value={formData.testimonialMessage}
-                onChange={(e) => setFormData({ ...formData, testimonialMessage: e.target.value })}
-                placeholder="Kutipan testimoni dari klien..."
-                rows={4}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="form-actions">
-        <button type="button" onClick={onClose} className="btn-cancel">
-          Batal
-        </button>
-        <button type="submit" className="btn-primary">
-          {projectId ? 'Update Project' : 'Simpan Project'}
-        </button>
-      </div>
-    </form>
+        </form>
   );
 }
