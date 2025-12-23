@@ -1,18 +1,68 @@
 'use client'
 import '@/src/app/admin/panel/layout.css'
-import { LayoutDashboard, ShoppingBag, UsersRound, UserRound, LogOut, Menu, X } from 'lucide-react'
+import { LayoutDashboard, ShoppingBag, UsersRound, UserRound, LogOut, Menu, X, SquareChartGantt } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const router = useRouter()
+  const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true)
+  const [userName, setUserName] = useState('Admin')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const minSwipeDistance = 50;
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token')
+      
+      if (!token) {
+        router.push('/auth/login')
+        return
+      }
+
+      try {
+        const res = await fetch('/api/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+
+        if (!res.ok) {
+          throw new Error('Invalid token')
+        }
+
+        const data = await res.json()
+        setUserName(data.user.name)
+        setIsAuthenticated(true)
+      } catch (error) {
+        console.error('Auth error:', error)
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        router.push('/auth/login')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    checkAuth()
+  }, [router])
+
+  const handleLogout = () => {
+    if (confirm('Yakin ingin logout?')) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      router.push('/auth/login')
+    }
+  }
 
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
@@ -51,6 +101,20 @@ export default function AdminLayout({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+    const isActive = (path: string) => pathname === path;
+
+  if (loading) {
+    return (
+      <div className='loading'>
+        Loading...
+      </div>
+    )
+  }
+
+    if (!isAuthenticated) {
+    return null
+  }
+
   return (
     <div className="admin-wrapper">
       <aside className={`sidebar ${!sidebarOpen ? 'closed' : ''}`}
@@ -63,7 +127,6 @@ export default function AdminLayout({
             <div className="logo-icon">JBK</div>
             <span className="logo-text">Jepun Bali Kencana</span>
           </div>
-          {/* Tombol X di dalam sidebar saat terbuka */}
           {sidebarOpen && (
             <button 
               className="sidebar-toggle"
@@ -75,26 +138,45 @@ export default function AdminLayout({
         </div>
 
         <nav className="sidebar-menu">
-          <a href="/admin/panel/dashboard" className="menu-item active">
+          <a 
+            href="/admin/panel/dashboard" 
+            className={`menu-item ${isActive('/admin/panel/dashboard') ? 'active' : ''}`}
+          >
             <LayoutDashboard size={20} />
             <span>Dashboard</span>
           </a>
-          <a href="/admin/panel/produk" className="menu-item">
+          <a 
+            href="/admin/panel/projects" 
+            className={`menu-item ${isActive('/admin/panel/projects') ? 'active' : ''}`}
+          >
+            <SquareChartGantt size={20} />
+            <span>Projects</span>
+          </a>
+          <a 
+            href="/admin/panel/produk" 
+            className={`menu-item ${isActive('/admin/panel/produk') ? 'active' : ''}`}
+          >
             <ShoppingBag size={20} />
             <span>Produk</span>
           </a>
-          <a href="/admin/panel/testimoni" className="menu-item">
+          <a 
+            href="/admin/panel/testimoni" 
+            className={`menu-item ${isActive('/admin/panel/testimoni') ? 'active' : ''}`}
+          >
             <UsersRound size={20} />
             <span>Testimoni</span>
           </a>
-          <a href="/admin/panel/profil-usaha" className="menu-item">
+          <a 
+            href="/admin/panel/profil-usaha" 
+            className={`menu-item ${isActive('/admin/panel/profil-usaha') ? 'active' : ''}`}
+          >
             <UserRound size={20} />
             <span>Profil Usaha</span>
           </a>
         </nav>
 
         <div className="sidebar-footer">
-          <button className="logout-btn">
+          <button className="logout-btn" onClick={() => handleLogout()}>
             <LogOut size={18} />
             <span>Logout</span>
           </button>

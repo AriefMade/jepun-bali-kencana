@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Calendar, Maximize2, User, Loader2 } from 'lucide-react';
-import './detail-karya.css';
+import '../detail-karya/detail-karya.css';
 
 type ProjectDetail = {
   id: number;
@@ -17,13 +17,13 @@ type ProjectDetail = {
   clientType: string;
   budget?: string;
   
-  // Images
+
   heroImage: string;
   thumbnailImage: string;
   beforeImage?: string;
   sketchImage?: string;
   
-  // Content
+
   initialCondition: string;
   mainChallenges: string[];
   clientNeeds: string[];
@@ -37,12 +37,11 @@ type ProjectDetail = {
   functionalBenefits: string[];
   aestheticValue: string;
   
-  // Testimonial
+
   testimonialName?: string;
   testimonialRole?: string;
   testimonialMessage?: string;
   
-  // Images Gallery
   images: {
     id: number;
     imageUrl: string;

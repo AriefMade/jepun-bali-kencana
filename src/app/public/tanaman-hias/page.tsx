@@ -1,53 +1,39 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './tanaman-hias.css';
 
 type Product = {
   id: number;
   name: string;
-  description: string;
+  description: string | null;
   category: string;
   stock: number;
-  image: string;
+  image: string | null;
 };
 
-const products: Product[] = [
-  { 
-    id: 1, 
-    name: 'Adenium Arabicum', 
-    description: 'Tanaman kamboja jepang premium dengan bunga pink cerah', 
-    category: 'Tanaman', 
-    stock: 15, 
-    image: '/products/adenium.jpg' 
-  },
-  { 
-    id: 2, 
-    name: 'Bougainvillea', 
-    description: 'Tanaman bunga kertas dengan warna-warni cerah', 
-    category: 'Tanaman', 
-    stock: 25, 
-    image: '/products/bougainvillea.jpg' 
-  },
-  { 
-    id: 3, 
-    name: 'Frangipani', 
-    description: 'Kamboja Bali asli dengan aroma harum', 
-    category: 'Tanaman', 
-    stock: 18, 
-    image: '/products/frangipani.jpg' 
-  },
-  { 
-    id: 4, 
-    name: 'Plumeria', 
-    description: 'Tanaman hias tropis eksotis', 
-    category: 'Tanaman', 
-    stock: 12, 
-    image: '/products/plumeria.jpg' 
-  },
-];
-
 export default function TanamanHiasPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch('/api/products?category=Tanaman');
+      const data = await res.json();
+      
+      if (data.success) {
+        setProducts(data.products);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const openPopup = (product: Product) => {
     setSelectedProduct(product);
@@ -57,30 +43,61 @@ export default function TanamanHiasPage() {
     setSelectedProduct(null);
   };
 
+  if (loading) {
+    return (
+      <div className="tanaman-hias-container">
+        <h1 className="page-title">Tanaman Hias Kami</h1>
+        <div style={{ textAlign: 'center', padding: '3rem', color: '#6b7280' }}>
+          Memuat produk...
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="tanaman-hias-container">
       <h1 className="page-title">Tanaman Hias Kami</h1>
       
-      <div className="products-grid">
-        {products.map((product) => (
-          <div key={product.id} className="product-card" onClick={() => openPopup(product)}>
-            <div className="product-image-wrapper">
-              <img 
-                src={product.image} 
-                alt={product.name}
-                className="product-image"
-                onError={(e) => {
-                  e.currentTarget.src = 'https://placehold.co/252x416';
-                }}
-              />
+      {products.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '3rem', color: '#6b7280' }}>
+          Belum ada produk tanaman hias
+        </div>
+      ) : (
+        <div className="products-grid">
+          {products.map((product) => (
+            <div key={product.id} className="product-card" onClick={() => openPopup(product)}>
+              <div className="product-image-wrapper">
+                {product.image ? (
+                  <img 
+                    src={product.image} 
+                    alt={product.name}
+                    className="product-image"
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://placehold.co/252x416';
+                    }}
+                  />
+                ) : (
+                  <div style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    background: '#E8E8E8',
+                    color: '#9ca3af'
+                  }}>
+                    No Image
+                  </div>
+                )}
+              </div>
+              <div className="product-info">
+                <h3 className="product-name">{product.name}</h3>
+                <p className="product-stock">Sisa {product.stock}</p>
+              </div>
             </div>
-            <div className="product-info">
-              <h3 className="product-name">{product.name}</h3>
-              <p className="product-stock">Sisa {product.stock}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {selectedProduct && (
         <div className="popup-overlay" onClick={closePopup}>
@@ -88,18 +105,34 @@ export default function TanamanHiasPage() {
             <button className="popup-close" onClick={closePopup}>×</button>
             <div className="popup-grid">
               <div className="popup-image-section">
-                <img 
-                  src={selectedProduct.image} 
-                  alt={selectedProduct.name}
-                  onError={(e) => {
-                    e.currentTarget.src = 'https://placehold.co/400x600';
-                  }}
-                />
+                {selectedProduct.image ? (
+                  <img 
+                    src={selectedProduct.image} 
+                    alt={selectedProduct.name}
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://placehold.co/400x600';
+                    }}
+                  />
+                ) : (
+                  <div style={{ 
+                    width: '100%', 
+                    height: '400px', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    background: '#E8E8E8',
+                    color: '#9ca3af'
+                  }}>
+                    No Image
+                  </div>
+                )}
               </div>
               <div className="popup-details">
                 <h2>{selectedProduct.name}</h2>
-                <p className="popup-category">{selectedProduct.category}</p>
-                <p className="popup-description">{selectedProduct.description}</p>
+                <div className="popup-category">{selectedProduct.category}</div>
+                <p className="popup-description">
+                  {selectedProduct.description || 'Tidak ada deskripsi'}
+                </p>
                 <div className="popup-stock-info">
                   <span className="stock-label">Stok Tersedia:</span>
                   <span className="stock-value">{selectedProduct.stock} unit</span>

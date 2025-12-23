@@ -1,247 +1,360 @@
 'use client'
 import './produk.css';
-import { Plus, Search, Filter, Edit2, Trash2, X, Upload } from 'lucide-react';
-import { useState } from 'react';
-
+import { Plus, Search, Edit2, Trash2, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 type Product = {
   id: number;
   name: string;
-  description: string;
+  description: string | null;
   category: string;
   stock: number;
-  image: string;
+  image: string | null;
 };
 
-const products: Product[] = [
-  { 
-    id: 1, 
-    name: 'Adenium Arabicum', 
-    description: 'Tanaman kamboja jepang premium dengan bunga pink cerah', 
-    category: 'Tanaman', 
-    stock: 15, 
-    image: '/products/adenium.jpg' 
-  },
-  { 
-    id: 2, 
-    name: 'Bonsai Serut', 
-    description: 'Bonsai serut berkualitas tinggi dengan bentuk artistik', 
-    category: 'Tanaman', 
-    stock: 8, 
-    image: '/products/bonsai.jpg' 
-  },
-  { 
-    id: 3, 
-    name: 'Candi Miniatur Prambanan', 
-    description: 'Replika candi Prambanan handmade detail tinggi', 
-    category: 'Candi', 
-    stock: 5, 
-    image: '/products/candi-prambanan.jpg' 
-  },
-  { 
-    id: 4, 
-    name: 'Pohon Palem Mini', 
-    description: 'Palem miniatur dalam pot keramik eksklusif', 
-    category: 'Tanaman', 
-    stock: 12, 
-    image: '/products/palem.jpg' 
-  },
-  { 
-    id: 5, 
-    name: 'Relief Ukir Bali', 
-    description: 'Relief ukiran bali tradisional motif bunga', 
-    category: 'Candi', 
-    stock: 3, 
-    image: '/products/relief.jpg' 
-  },
-  { 
-    id: 6, 
-    name: 'Kaktus Collection Set', 
-    description: 'Set 5 kaktus berbagai jenis dalam pot mini', 
-    category: 'Tanaman', 
-    stock: 20, 
-    image: '/products/kaktus.jpg' 
-  },
-  { 
-    id: 7, 
-    name: 'Tanaman Sukulen Mix', 
-    description: 'Kombinasi sukulen warna-warni dalam pot keramik', 
-    category: 'Tanaman', 
-    stock: 18, 
-    image: '/products/sukulen.jpg' 
-  },
-  { 
-    id: 8, 
-    name: 'Candi Borobudur Mini', 
-    description: 'Miniatur candi Borobudur dengan detail sempurna', 
-    category: 'Candi', 
-    stock: 7, 
-    image: '/products/borobudur.jpg' 
-  },
-  { 
-    id: 9, 
-    name: 'Sansevieria Cylindrica', 
-    description: 'Tanaman hias lidah mertua berbentuk silinder unik', 
-    category: 'Tanaman', 
-    stock: 25, 
-    image: '/products/sansevieria.jpg' 
-  },
-  { 
-    id: 10, 
-    name: 'Patung Ganesha Stone', 
-    description: 'Patung Ganesha dari batu alam finishing halus', 
-    category: 'Candi', 
-    stock: 4, 
-    image: '/products/ganesha.jpg' 
-  },
-];
-
-export default function produkPage() {
+export default function ProdukPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('Semua');
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    category: 'Tanaman',
+    stock: 0,
+    image: ''
+  });
 
+  useEffect(() => {
+    fetchProducts();
+  }, [filterCategory]);
+
+  const fetchProducts = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const url = filterCategory === 'Semua' 
+        ? '/api/products' 
+        : `/api/products?category=${filterCategory}`;
+      
+      const res = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        setProducts(data.products);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAdd = () => {
+    setFormData({
+      name: '',
+      description: '',
+      category: 'Tanaman',
+      stock: 0,
+      image: ''
+    });
+    setShowAddModal(true);
+  };
+
+  const handleEdit = (product: Product) => {
+    setSelectedProduct(product);
+    setFormData({
+      name: product.name,
+      description: product.description || '',
+      category: product.category,
+      stock: product.stock,
+      image: product.image || ''
+    });
+    setShowEditModal(true);
+  };
+
+  const handleDelete = (product: Product) => {
+    setSelectedProduct(product);
+    setShowDeleteModal(true);
+  };
+
+  const handleSubmitAdd = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/products', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        fetchProducts();
+        setShowAddModal(false);
+        alert('Produk berhasil ditambahkan!');
+      } else {
+        alert(data.error || 'Gagal menambah produk');
+      }
+    } catch (error) {
+      console.error('Error adding product:', error);
+      alert('Terjadi kesalahan saat menambah produk');
+    }
+  };
+
+  const handleSubmitEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedProduct) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/products/${selectedProduct.id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        fetchProducts();
+        setShowEditModal(false);
+        alert('Produk berhasil diupdate!');
+      } else {
+        alert(data.error || 'Gagal update produk');
+      }
+    } catch (error) {
+      console.error('Error updating product:', error);
+      alert('Terjadi kesalahan saat update produk');
+    }
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedProduct) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/products/${selectedProduct.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        fetchProducts();
+        setShowDeleteModal(false);
+        alert('Produk berhasil dihapus!');
+      } else {
+        alert(data.error || 'Gagal menghapus produk');
+      }
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      alert('Terjadi kesalahan saat menghapus produk');
+    }
+  };
+
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  if (loading) {
+    return (
+      <div className="produk-container">
+        <div style={{ textAlign: 'center', padding: '3rem' }}>
+          Loading...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="produk-container">
       <div className="page-header">
-        <h1 className="page-title"> List Produk</h1>
-        <p className="page-subtitle">Kelola semua produk Jepun Bali Kencana</p>
+        <h1 className="page-title">Produk</h1>
+        <p className="page-subtitle">Kelola semua produk tanaman dan candi Anda</p>
       </div>
 
       <div className="action-bar">
         <div className="search-box">
-          <Search size={18} />
-          <input 
-            type="text" 
-            placeholder="Cari produk..." 
+          <Search size={20} />
+          <input
+            type="text"
+            placeholder="Cari produk..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
         <div className="filter-group">
-          <button className={`filter-btn ${filterCategory === 'Semua' ? 'active' : ''}`} onClick={() => setFilterCategory('Semua')}>
+          <button 
+            className={`filter-btn ${filterCategory === 'Semua' ? 'active' : ''}`}
+            onClick={() => setFilterCategory('Semua')}
+          >
             Semua
           </button>
-          <button className={`filter-btn ${filterCategory === 'Tanaman' ? 'active' : ''}`} onClick={() => setFilterCategory('Tanaman')}>
+          <button 
+            className={`filter-btn ${filterCategory === 'Tanaman' ? 'active' : ''}`}
+            onClick={() => setFilterCategory('Tanaman')}
+          >
             Tanaman
           </button>
-          <button className={`filter-btn ${filterCategory === 'Candi' ? 'active' : ''}`} onClick={() => setFilterCategory('Candi')}>
+          <button 
+            className={`filter-btn ${filterCategory === 'Candi' ? 'active' : ''}`}
+            onClick={() => setFilterCategory('Candi')}
+          >
             Candi
           </button>
         </div>
 
-        <button className="btn-add" onClick={() => setShowAddModal(true)}>
+        <button className="btn-add" onClick={handleAdd}>
           <Plus size={20} />
           Tambah Produk
         </button>
       </div>
 
       <div className="products-grid">
-        {products.map((product) => (
-          <div key={product.id} className="product-card">
-            <div className="product-image">
-              {product.image ? (
-                <img src={product.image} alt={product.name} />
-              ) : (
-                <div className="placeholder-image">
-                  <Upload size={32} />
-                  <p>No Image</p>
+        {filteredProducts.length === 0 ? (
+          <div style={{ 
+            gridColumn: '1 / -1', 
+            textAlign: 'center', 
+            padding: '3rem',
+            color: '#6b7280'
+          }}>
+            Belum ada produk
+          </div>
+        ) : (
+          filteredProducts.map((product) => (
+            <div key={product.id} className="product-card">
+              <div className="product-image">
+                {product.image ? (
+                  <img src={product.image} alt={product.name} />
+                ) : (
+                  <div className="placeholder-image">No Image</div>
+                )}
+              </div>
+              
+              <div className="product-content">
+                <h3 className="product-name">{product.name}</h3>
+                <p className="product-description">
+                  {product.description || 'Tidak ada deskripsi'}
+                </p>
+                
+                <div className="product-meta">
+                  <span className="product-category">{product.category}</span>
+                  <span className="product-stock">Stok: {product.stock}</span>
                 </div>
-              )}
-            </div>
-
-            <div className="product-content">
-              <h3 className="product-name">{product.name}</h3>
-              <p className="product-description">{product.description}</p>
-
-              <div className="product-meta">
-                <span className="product-category">{product.category}</span>
-                <span className="product-stock">Stok: {product.stock}</span>
               </div>
 
               <div className="product-actions">
                 <button 
                   className="btn-edit"
-                  onClick={() => {
-                    setSelectedProduct(product);
-                    setShowEditModal(true);
-                  }}
+                  onClick={() => handleEdit(product)}
                 >
                   <Edit2 size={16} />
                   Edit
                 </button>
                 <button 
                   className="btn-delete"
-                  onClick={() => {
-                    setSelectedProduct(product);
-                    setShowDeleteModal(true);
-                  }}
+                  onClick={() => handleDelete(product)}
                 >
                   <Trash2 size={16} />
                   Hapus
                 </button>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
-      {(showAddModal || showEditModal) && (
-        <div className="modal-overlay" onClick={() => { setShowAddModal(false); setShowEditModal(false); }}>
+      {/* Add Modal */}
+      {showAddModal && (
+        <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>{showAddModal ? 'Tambah Produk Baru' : 'Edit Produk'}</h2>
-              <button className="btn-close" onClick={() => { setShowAddModal(false); setShowEditModal(false); }}>
+              <h2>Tambah Produk Baru</h2>
+              <button className="btn-close" onClick={() => setShowAddModal(false)}>
                 <X size={24} />
               </button>
             </div>
 
-            <form className="modal-form">
-              <div className="form-group">
-                <label>Upload Gambar</label>
-                <div className="upload-area">
-                  <Upload size={32} />
-                  <p>Klik atau drag gambar di sini</p>
-                  <input type="file" accept="image/*" />
-                </div>
-              </div>
-
+            <form className="modal-form" onSubmit={handleSubmitAdd}>
               <div className="form-group">
                 <label>Nama Produk</label>
-                <input type="text" placeholder="Masukkan nama produk" defaultValue={selectedProduct?.name} />
+                <input
+                  type="text"
+                  placeholder="Masukkan nama produk"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  required
+                />
               </div>
 
               <div className="form-group">
                 <label>Deskripsi</label>
-                <textarea placeholder="Masukkan deskripsi produk" defaultValue={selectedProduct?.description} rows={3} />
+                <textarea
+                  placeholder="Masukkan deskripsi produk"
+                  rows={3}
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                ></textarea>
               </div>
 
               <div className="form-row">
                 <div className="form-group">
                   <label>Kategori</label>
-                  <select defaultValue={selectedProduct?.category}>
-                    <option>Tanaman</option>
-                    <option>Candi</option>
+                  <select 
+                    value={formData.category}
+                    onChange={(e) => setFormData({...formData, category: e.target.value})}
+                    required
+                  >
+                    <option value="Tanaman">Tanaman</option>
+                    <option value="Candi">Candi</option>
                   </select>
                 </div>
 
                 <div className="form-group">
                   <label>Stok</label>
-                  <input type="number" placeholder="0" defaultValue={selectedProduct?.stock} />
+                  <input
+                    type="number"
+                    placeholder="0"
+                    min="0"
+                    value={formData.stock}
+                    onChange={(e) => setFormData({...formData, stock: parseInt(e.target.value) || 0})}
+                    required
+                  />
                 </div>
               </div>
 
+              <div className="form-group">
+                <label>URL Gambar</label>
+                <input
+                  type="text"
+                  placeholder="https://example.com/image.jpg"
+                  value={formData.image}
+                  onChange={(e) => setFormData({...formData, image: e.target.value})}
+                />
+              </div>
+
               <div className="modal-actions">
-                <button type="button" className="btn-cancel" onClick={() => { setShowAddModal(false); setShowEditModal(false); }}>
+                <button type="button" className="btn-cancel" onClick={() => setShowAddModal(false)}>
                   Batal
                 </button>
                 <button type="submit" className="btn-submit">
-                  {showAddModal ? 'Tambah Produk' : 'Simpan Perubahan'}
+                  Simpan Produk
                 </button>
               </div>
             </form>
@@ -249,22 +362,117 @@ export default function produkPage() {
         </div>
       )}
 
-      {showDeleteModal && (
-        <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
-          <div className="modal-content modal-delete" onClick={(e) => e.stopPropagation()}>
-            <div className="delete-icon">
-              <Trash2 size={48} />
+      {/* Edit Modal */}
+      {showEditModal && selectedProduct && (
+        <div className="modal-overlay" onClick={() => setShowEditModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Edit Produk</h2>
+              <button className="btn-close" onClick={() => setShowEditModal(false)}>
+                <X size={24} />
+              </button>
             </div>
-            <h2>Hapus Produk?</h2>
-            <p>Apakah Anda yakin ingin menghapus <strong>{selectedProduct?.name}</strong>? Tindakan ini tidak dapat dibatalkan.</p>
-            
-            <div className="modal-actions">
-              <button className="btn-cancel" onClick={() => setShowDeleteModal(false)}>
-                Batal
+
+            <form className="modal-form" onSubmit={handleSubmitEdit}>
+              <div className="form-group">
+                <label>Nama Produk</label>
+                <input
+                  type="text"
+                  placeholder="Masukkan nama produk"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Deskripsi</label>
+                <textarea
+                  placeholder="Masukkan deskripsi produk"
+                  rows={3}
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                ></textarea>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Kategori</label>
+                  <select 
+                    value={formData.category}
+                    onChange={(e) => setFormData({...formData, category: e.target.value})}
+                    required
+                  >
+                    <option value="Tanaman">Tanaman</option>
+                    <option value="Candi">Candi</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Stok</label>
+                  <input
+                    type="number"
+                    placeholder="0"
+                    min="0"
+                    value={formData.stock}
+                    onChange={(e) => setFormData({...formData, stock: parseInt(e.target.value) || 0})}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>URL Gambar</label>
+                <input
+                  type="text"
+                  placeholder="https://example.com/image.jpg"
+                  value={formData.image}
+                  onChange={(e) => setFormData({...formData, image: e.target.value})}
+                />
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="btn-cancel" onClick={() => setShowEditModal(false)}>
+                  Batal
+                </button>
+                <button type="submit" className="btn-submit">
+                  Update Produk
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && selectedProduct && (
+        <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px' }}>
+            <div className="modal-header">
+              <h2>Konfirmasi Hapus</h2>
+              <button className="btn-close" onClick={() => setShowDeleteModal(false)}>
+                <X size={24} />
               </button>
-              <button className="btn-delete-confirm">
-                Ya, Hapus
-              </button>
+            </div>
+
+            <div style={{ padding: '1.5rem', textAlign: 'center' }}>
+              <p style={{ marginBottom: '1.5rem', color: '#6b7280' }}>
+                Apakah Anda yakin ingin menghapus produk <strong>{selectedProduct.name}</strong>?
+              </p>
+
+              <div className="modal-actions">
+                <button type="button" className="btn-cancel" onClick={() => setShowDeleteModal(false)}>
+                  Batal
+                </button>
+                <button 
+                  type="button" 
+                  className="btn-submit" 
+                  onClick={confirmDelete}
+                  style={{ background: '#ef4444' }}
+                >
+                  Hapus
+                </button>
+              </div>
             </div>
           </div>
         </div>
