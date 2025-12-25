@@ -28,9 +28,13 @@ export async function GET(request: NextRequest) {
       where: { isPublished: true }
     });
 
-    // Get today's visitor count
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    // Get today's visitor count (use local date in YYYY-MM-DD format)
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const todayStr = `${year}-${month}-${day}`;
+    const today = new Date(todayStr);
     
     const todayVisitors = await prisma.visitorStats.findUnique({
       where: { date: today }
