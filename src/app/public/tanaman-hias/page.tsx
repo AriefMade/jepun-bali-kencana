@@ -11,10 +11,15 @@ type Product = {
   image: string | null;
 };
 
+type ProfileData = {
+  whatsapp: string | null;
+};
+
 export default function TanamanHiasPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
 
   useEffect(() => {
     fetchProducts();
@@ -35,6 +40,26 @@ export default function TanamanHiasPage() {
     }
   };
 
+  const fetchProfileData = async () => {
+    try {
+      const res = await fetch('/api/profile-data');
+      const data = await res.json();
+      
+      if (data.success) {
+        setProfileData(data.profileData);
+      }
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+    fetchProfileData();
+  }, []);
+
   const openPopup = (product: Product) => {
     setSelectedProduct(product);
   };
@@ -51,6 +76,21 @@ export default function TanamanHiasPage() {
           Memuat produk...
         </div>
       </div>
+    );
+  }
+
+    if (!profileData) {
+    return (
+      <section id="contact" className="contact-section">
+        <div className="container">
+          <header className="contact-header">
+            <h2>GET IN TOUCH</h2>
+          </header>
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#6b7280' }}>
+            Data kontak tidak tersedia
+          </div>
+        </div>
+      </section>
     );
   }
 
@@ -137,7 +177,11 @@ export default function TanamanHiasPage() {
                   <span className="stock-label">Stok Tersedia:</span>
                   <span className="stock-value">{selectedProduct.stock} unit</span>
                 </div>
-                <button className="contact-button">Hubungi Kami</button>
+                {profileData.whatsapp && (
+                <a href={profileData.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                 <button className="contact-button">Hubungi Kami</button>
+                </a>
+                )}
               </div>
             </div>
           </div>

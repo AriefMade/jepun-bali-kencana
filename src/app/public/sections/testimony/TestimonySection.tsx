@@ -27,8 +27,7 @@ export default function TestimonySection() {
       const data = await res.json();
       
       if (data.success) {
-        // Ambil 4 testimoni pertama untuk ditampilkan
-        setTestimonials(data.testimonials.slice(0, 4));
+        setTestimonials(data.testimonials.slice(0, 28));
       }
     } catch (error) {
       console.error('Error fetching testimonials:', error);
@@ -38,7 +37,7 @@ export default function TestimonySection() {
   };
 
   return (
-    <section className="testimony-section">
+    <section id="testimony" className="testimony-section">
       <div className="testimony-container">
         <div className="testimony-content">
           <header className="testimony-header">
@@ -48,9 +47,6 @@ export default function TestimonySection() {
             <p className="testimony-description">
               Setiap karya kami lahir dari tangan berpengalaman dan dedikasi tinggi terhadap keindahan alami. Lihat apa yang pelanggan kami rasakan.
             </p>
-            <button className="testimony-button">
-              Lihat Semua →
-            </button>
           </header>
 
           <div className="testimony-cards-wrapper">

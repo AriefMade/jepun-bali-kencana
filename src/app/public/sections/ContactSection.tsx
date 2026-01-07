@@ -36,7 +36,7 @@ export default function ContactSection() {
 
   if (loading) {
     return (
-      <section className="contact-section">
+      <section id="contact" className="contact-section">
         <div className="container">
           <header className="contact-header">
             <h2>GET IN TOUCH</h2>
@@ -51,7 +51,7 @@ export default function ContactSection() {
 
   if (!profileData) {
     return (
-      <section className="contact-section">
+      <section id="contact" className="contact-section">
         <div className="container">
           <header className="contact-header">
             <h2>GET IN TOUCH</h2>
@@ -65,7 +65,7 @@ export default function ContactSection() {
   }
 
   return (
-    <section className="contact-section">
+    <section id="contact" className="contact-section">
   <div className="container">
     <header className="contact-header">
       <h2>GET IN TOUCH</h2>

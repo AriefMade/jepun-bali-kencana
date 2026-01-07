@@ -1,5 +1,12 @@
+'use client';
+
 import "../styles/home.css";
 export default function HeroSection() {
+    const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
+  
   return (
     <section id="hero" className="home-wrapper">
       <div className="brand-title">
@@ -13,11 +20,11 @@ export default function HeroSection() {
       </div>
 
       <nav className="navbar">
-        <div className="menu-item">home</div>
-        <div className="menu-item">Category</div>
-        <div className="menu-item">Testimony</div>
-        <div className="menu-item">gallery</div>
-        <div className="menu-item">contact us</div>
+        <div className="menu-item" onClick={() => scrollToSection('hero')}>home</div>
+        <div className="menu-item" onClick={() => scrollToSection('category')}>Category</div>
+        <div className="menu-item" onClick={() => scrollToSection('testimony')}>Testimony</div>
+        <div className="menu-item" onClick={() => scrollToSection('gallery')}>gallery</div>
+        <div className="menu-item" onClick={() => scrollToSection('contact')}>contact us</div>
       </nav>
 
       <img className="side-prev-bar" src="/Vector 9.svg" alt="prev"/>
@@ -31,16 +38,16 @@ export default function HeroSection() {
       <div className="scroll-label">Scroll down</div>
       
       <div className="wrapper-indicator">
-        <div className="indicator">01</div>
-        <div className="indicator">02</div>
-        <div className="indicator">03</div>
-        <div className="indicator">04</div>
-        <div className="indicator">05</div>
+        <div className="indicator" onClick={() => scrollToSection('hero')} >01</div>
+        <div className="indicator" onClick={() => scrollToSection('category')}>02</div>
+        <div className="indicator" onClick={() => scrollToSection('testimony')}>03</div>
+        <div className="indicator" onClick={() => scrollToSection('gallery')}>04</div>
+        <div className="indicator" onClick={() => scrollToSection('contact')}>05</div>
       </div>
      
       <img className="logo" src="/logo.png" alt="logo" />
-      <div className="side-social fb">facebook</div>
-      <div className="side-social ig">instagram</div>
+      <button className="side-social fb" onClick={() => scrollToSection('contact')}>facebook</button>
+      <div className="side-social ig" onClick={() => scrollToSection('contact')}>instagram</div>
 
       <div className="landing-desc">
         Selamat datang di Jepun Bali Kencana, tempat di mana keindahan 
@@ -51,7 +58,7 @@ export default function HeroSection() {
       <img className="jepun" src="/image 9.png" alt="jepun"/>
       <div className="green-panel"></div>
       
-      <button className="tombol">
+      <button className="tombol" onClick={() => scrollToSection('category')}>
         jelajahi →
       </button>
       

@@ -32,15 +32,7 @@ export default function TestimonialCard({ name, message, rating }: TestimonialCa
       }}
     >
       <div>
-        <img className="quote" src={"/Vector.svg"}
-          // style={{
-          //   width: 40,
-          //   height: 25,
-          //   background: "#67904E",
-          //   borderRadius: "4px"
-          // }}
-        />
-
+        <img className="quote" src={"/Vector.svg"}/>
         <p
           style={{
             marginTop: 15,

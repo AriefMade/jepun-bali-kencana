@@ -9,7 +9,6 @@ type Testimoni = {
   message: string;
   rating: number;
   category: string | null;
-  avatar: string | null;
   date: Date;
 };
 
@@ -25,7 +24,6 @@ export default function TestimoniPage() {
     message: '',
     rating: 5,
     category: '',
-    avatar: '',
     date: new Date().toISOString().split('T')[0]
   });
 
@@ -59,7 +57,6 @@ export default function TestimoniPage() {
       message: '',
       rating: 5,
       category: '',
-      avatar: '',
       date: new Date().toISOString().split('T')[0]
     });
     setShowAddModal(true);
@@ -72,7 +69,6 @@ export default function TestimoniPage() {
       message: testimoni.message,
       rating: testimoni.rating,
       category: testimoni.category || '',
-      avatar: testimoni.avatar || '',
       date: new Date(testimoni.date).toISOString().split('T')[0]
     });
     setShowEditModal(true);
@@ -220,16 +216,6 @@ export default function TestimoniPage() {
         ) : (
           testimonials.map((testimoni) => (
             <div key={testimoni.id} className="testimoni-card">
-              <div className="card-avatar">
-                {testimoni.avatar ? (
-                  <img src={testimoni.avatar} alt={testimoni.name} />
-                ) : (
-                  <div className="avatar-placeholder">
-                    <User size={32} />
-                  </div>
-                )}
-              </div>
-
               <div className="card-content">
                 <div className="card-header-info">
                   <h3 className="customer-name">{testimoni.name}</h3>
@@ -334,17 +320,6 @@ export default function TestimoniPage() {
                   </div>
                 </div>
               </div>
-
-              <div className="form-group">
-                <label>URL Avatar (Opsional)</label>
-                <input
-                  type="text"
-                  placeholder="https://example.com/avatar.jpg"
-                  value={formData.avatar}
-                  onChange={(e) => setFormData({...formData, avatar: e.target.value})}
-                />
-              </div>
-
               <div className="form-group">
                 <label>Tanggal</label>
                 <input
@@ -435,17 +410,6 @@ export default function TestimoniPage() {
                   </div>
                 </div>
               </div>
-
-              <div className="form-group">
-                <label>URL Avatar (Opsional)</label>
-                <input
-                  type="text"
-                  placeholder="https://example.com/avatar.jpg"
-                  value={formData.avatar}
-                  onChange={(e) => setFormData({...formData, avatar: e.target.value})}
-                />
-              </div>
-
               <div className="form-group">
                 <label>Tanggal</label>
                 <input

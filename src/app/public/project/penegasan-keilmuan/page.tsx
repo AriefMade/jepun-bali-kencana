@@ -81,7 +81,6 @@ export default function PenegasanKeilmuan() {
 
   return (
     <div className="philosophy-wrapper">
-      {/* Hero Section */}
       <section className="philosophy-hero">
         <div className="hero-container">
           <span className="hero-label">Pendekatan Desain</span>
@@ -97,7 +96,6 @@ export default function PenegasanKeilmuan() {
         </div>
       </section>
 
-      {/* Opening Statement */}
       <section className="philosophy-statement">
         <div className="statement-container">
           <p className="statement-text">
@@ -109,7 +107,6 @@ export default function PenegasanKeilmuan() {
         </div>
       </section>
 
-      {/* Design Principles */}
       <section className="principles-section">
         <div className="principles-container">
           <div className="section-header">
@@ -136,7 +133,6 @@ export default function PenegasanKeilmuan() {
         </div>
       </section>
 
-      {/* Workflow Section */}
       <section className="workflow-section">
         <div className="workflow-container">
           <div className="section-header">
@@ -165,7 +161,6 @@ export default function PenegasanKeilmuan() {
         </div>
       </section>
 
-      {/* Tropical Heritage Approach */}
       <section className="approach-section">
         <div className="approach-container">
           <div className="approach-content">
@@ -204,19 +199,13 @@ export default function PenegasanKeilmuan() {
             </div>
           </div>
 
-          <div className="approach-visual">
             <div className="visual-placeholder">
-              <div className="visual-text">
-                <Leaf size={48} />
-                <p>Diagram Pendekatan Desain</p>
-                <span>(Coming Soon)</span>
-              </div>
+              <img src="/image 9.png" alt="Diagram Pendekatan Desain" width={448} height={448} />
+
             </div>
-          </div>
         </div>
       </section>
 
-      {/* Closing Statement */}
       <section className="closing-section">
         <div className="closing-container">
           <blockquote className="closing-quote">
@@ -228,7 +217,6 @@ export default function PenegasanKeilmuan() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="philosophy-cta">
         <div className="cta-content">
           <h2 className="cta-title">Mari Wujudkan Lanskap Impian Anda</h2>

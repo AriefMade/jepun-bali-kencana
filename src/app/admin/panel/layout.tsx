@@ -1,6 +1,6 @@
 'use client'
 import '@/src/app/admin/panel/layout.css'
-import { LayoutDashboard, ShoppingBag, UsersRound, UserRound, LogOut, Menu, X, SquareChartGantt } from 'lucide-react'
+import { LayoutDashboard, ShoppingBag, UsersRound, UserRound, ImageIcon, LogOut, Menu, X, SquareChartGantt } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
@@ -158,6 +158,13 @@ export default function AdminLayout({
           >
             <ShoppingBag size={20} />
             <span>Produk</span>
+          </a>
+          <a 
+            href="/admin/panel/gallery" 
+            className={`menu-item ${isActive('/admin/panel/gallery') ? 'active' : ''}`}
+          >
+            <ImageIcon size={20} />
+            <span>Gallery</span>
           </a>
           <a 
             href="/admin/panel/testimoni" 

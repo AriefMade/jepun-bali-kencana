@@ -62,7 +62,6 @@ export default function OverviewKarya() {
 
   return (
     <div className="portfolio-wrapper">
-      {/* Hero Section */}
       <section className="portfolio-hero">
         <div className="hero-content">
           <h1 className="hero-title">Portfolio Arsitektur Lanskap</h1>
@@ -73,7 +72,6 @@ export default function OverviewKarya() {
         </div>
       </section>
 
-      {/* Filter Section */}
       <section className="portfolio-filter">
         <div className="filter-container">
           {categories.map((cat) => (
@@ -88,7 +86,6 @@ export default function OverviewKarya() {
         </div>
       </section>
 
-      {/* Projects Grid */}
       <section className="portfolio-grid">
         <div className="grid-container">
           {projects.length === 0 ? (
@@ -161,7 +158,6 @@ export default function OverviewKarya() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="portfolio-cta">
         <div className="cta-content">
           <h2>Tertarik dengan Pendekatan Desain Kami?</h2>
@@ -170,7 +166,7 @@ export default function OverviewKarya() {
             <Link href="/public/project/penegasan-keilmuan" className="cta-button-outline">
               Pelajari Pendekatan Kami
             </Link>
-            <Link href="/public/sections/ContactSection" className="cta-button">
+            <Link href="/#contact" className="cta-button">
               Hubungi Kami
             </Link>
           </div>

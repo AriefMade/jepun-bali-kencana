@@ -4,11 +4,10 @@ import '@/src/app/public/styles/category.css';
 
 export default function Category() {
   return (
-    <section className="category-wrapper">
+    <section id="category" className="category-wrapper">
       <h2 className="category-title">Kategori Produk Kami</h2>
       
       <div className="category-grid">
-        {/* Arsitektur Lanskap - Kartu Besar Kiri */}
         <Link href="/public/project/overview-karya" className="category-card large">
           <div className="category-content">
             <div className="category-text">
@@ -24,7 +23,6 @@ export default function Category() {
           </div>
         </Link>
 
-        {/* Tanaman Hias - Kartu Kanan Atas */}
         <Link href="/public/tanaman-hias" className="category-card top-right">
           <div className="category-content">
             <div className="category-text">
@@ -40,7 +38,6 @@ export default function Category() {
           </div>
         </Link>
 
-        {/* Ornamen Candi - Kartu Kanan Bawah */}
         <Link href="/public/tugu-dan-sanggah" className="category-card bottom-right">
           <div className="category-content">
             <div className="category-text">

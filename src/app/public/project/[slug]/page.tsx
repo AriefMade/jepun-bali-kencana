@@ -61,20 +61,20 @@ export default function DetailKarya() {
   useEffect(() => {
   const fetchProject = async () => {
     try {
-      console.log('Fetching slug:', slug); // Debug
+      console.log('Fetching slug:', slug); 
       const res = await fetch(`/api/projects/${slug}`);
       
-      console.log('Response status:', res.status); // Debug
+      console.log('Response status:', res.status); 
       
       if (!res.ok) {
         throw new Error('Project tidak ditemukan');
       }
 
       const data = await res.json();
-      console.log('Project data:', data); // Debug
+      console.log('Project data:', data); 
       setProject(data.project);
     } catch (err: any) {
-      console.error('Fetch error:', err); // Debug
+      console.error('Fetch error:', err); 
       setError(err.message);
     } finally {
       setLoading(false);
@@ -87,8 +87,16 @@ export default function DetailKarya() {
   if (loading) {
     return (
       <div className="loading-container">
-        <Loader2 size={48} className="spinner" />
-        <p>Loading project...</p>
+        <div className="loading-content">
+          <div className="spinner-wrapper">
+            <Loader2 size={56} className="spinner" />
+          </div>
+          <h2 className="loading-title">Memuat Proyek</h2>
+          <p className="loading-text">Mohon tunggu sebentar...</p>
+          <div className="loading-bar">
+            <div className="loading-bar-fill"></div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -103,7 +111,7 @@ export default function DetailKarya() {
     );
   }
 
-  // Group images by type
+
   const beforeImages = project.images.filter(img => img.imageType === 'before');
   const duringImages = project.images.filter(img => img.imageType === 'during');
   const afterImages = project.images.filter(img => img.imageType === 'after');
@@ -111,13 +119,11 @@ export default function DetailKarya() {
 
   return (
     <div className="detail-wrapper">
-      {/* Back Button */}
       <Link href="/public/project/overview-karya" className="back-button">
         <ArrowLeft size={20} />
         <span>Kembali ke Portfolio</span>
       </Link>
 
-      {/* Hero Section */}
       <section className="detail-hero">
         <div className="hero-image-container">
           <img src={project.heroImage} alt={project.title} className="hero-image" />
@@ -130,7 +136,6 @@ export default function DetailKarya() {
         </div>
       </section>
 
-      {/* Project Info Bar */}
       <section className="project-info-bar">
         <div className="info-container">
           <div className="info-item">
@@ -171,9 +176,7 @@ export default function DetailKarya() {
         </div>
       </section>
 
-      {/* Content Sections */}
       <div className="detail-content">
-        {/* Background & Challenge */}
         <section className="content-section">
           <h2 className="section-title">Latar Belakang & Tantangan</h2>
           
@@ -201,7 +204,6 @@ export default function DetailKarya() {
           </div>
         </section>
 
-        {/* Design Approach */}
         <section className="content-section bg-light">
           <h2 className="section-title">Pendekatan Desain Lanskap</h2>
 
@@ -235,7 +237,6 @@ export default function DetailKarya() {
           </div>
         </section>
 
-        {/* Process */}
         <section className="content-section">
           <h2 className="section-title">Proses Pengerjaan</h2>
 
@@ -261,7 +262,6 @@ export default function DetailKarya() {
           </div>
         </section>
 
-        {/* Gallery */}
         <section className="content-section gallery-section">
           <h2 className="section-title">Dokumentasi Visual</h2>
 
@@ -322,7 +322,6 @@ export default function DetailKarya() {
           )}
         </section>
 
-        {/* Results & Impact */}
         <section className="content-section bg-light">
           <h2 className="section-title">Hasil & Dampak</h2>
 
@@ -352,7 +351,6 @@ export default function DetailKarya() {
           )}
         </section>
 
-        {/* CTA */}
         <section className="content-section cta-section">
           <h2 className="cta-title">Tertarik dengan Pendekatan Kami?</h2>
           <p className="cta-text">Mari diskusikan proyek lanskap Anda dan bagaimana kami dapat mewujudkannya.</p>

@@ -1,6 +1,6 @@
 'use client'
 import './produk.css';
-import { Plus, Search, Edit2, Trash2, X } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, X, Image as ImageIcon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 type Product = {
@@ -21,12 +21,13 @@ export default function ProdukPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('Semua');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     category: 'Tanaman',
-    stock: 0,
-    image: ''
+    stock: 0
   });
 
   useEffect(() => {
@@ -57,14 +58,27 @@ export default function ProdukPage() {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleAdd = () => {
     setFormData({
       name: '',
       description: '',
       category: 'Tanaman',
-      stock: 0,
-      image: ''
+      stock: 0
     });
+    setImageFile(null);
+    setImagePreview('');
     setShowAddModal(true);
   };
 
@@ -74,9 +88,10 @@ export default function ProdukPage() {
       name: product.name,
       description: product.description || '',
       category: product.category,
-      stock: product.stock,
-      image: product.image || ''
+      stock: product.stock
     });
+    setImageFile(null);
+    setImagePreview(product.image || '');
     setShowEditModal(true);
   };
 
@@ -89,13 +104,21 @@ export default function ProdukPage() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('category', formData.category);
+      formDataToSend.append('stock', formData.stock.toString());
+      if (imageFile) {
+        formDataToSend.append('image', imageFile);
+      }
+
       const res = await fetch('/api/products', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: formDataToSend
       });
 
       const data = await res.json();
@@ -118,13 +141,21 @@ export default function ProdukPage() {
 
     try {
       const token = localStorage.getItem('token');
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('category', formData.category);
+      formDataToSend.append('stock', formData.stock.toString());
+      if (imageFile) {
+        formDataToSend.append('image', imageFile);
+      }
+
       const res = await fetch(`/api/products/${selectedProduct.id}`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: formDataToSend
       });
 
       const data = await res.json();
@@ -340,13 +371,24 @@ export default function ProdukPage() {
               </div>
 
               <div className="form-group">
-                <label>URL Gambar</label>
-                <input
-                  type="text"
-                  placeholder="https://example.com/image.jpg"
-                  value={formData.image}
-                  onChange={(e) => setFormData({...formData, image: e.target.value})}
-                />
+                <label>Upload Gambar</label>
+                <div className="image-upload-area">
+                  {imagePreview ? (
+                    <div className="image-preview">
+                      <img src={imagePreview} alt="Preview" />
+                    </div>
+                  ) : (
+                    <div className="upload-placeholder">
+                      <ImageIcon size={48} />
+                      <p>Klik untuk upload gambar</p>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                </div>
               </div>
 
               <div className="modal-actions">
@@ -362,7 +404,7 @@ export default function ProdukPage() {
         </div>
       )}
 
-      {/* Edit Modal */}
+      {/* Edit Modal - sama seperti Add Modal */}
       {showEditModal && selectedProduct && (
         <div className="modal-overlay" onClick={() => setShowEditModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -422,13 +464,24 @@ export default function ProdukPage() {
               </div>
 
               <div className="form-group">
-                <label>URL Gambar</label>
-                <input
-                  type="text"
-                  placeholder="https://example.com/image.jpg"
-                  value={formData.image}
-                  onChange={(e) => setFormData({...formData, image: e.target.value})}
-                />
+                <label>Upload Gambar</label>
+                <div className="image-upload-area">
+                  {imagePreview ? (
+                    <div className="image-preview">
+                      <img src={imagePreview} alt="Preview" />
+                    </div>
+                  ) : (
+                    <div className="upload-placeholder">
+                      <ImageIcon size={48} />
+                      <p>Klik untuk upload gambar</p>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                </div>
               </div>
 
               <div className="modal-actions">

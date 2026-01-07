@@ -7,6 +7,7 @@ type Product = {
   name: string;
   description: string | null;
   category: string;
+  whatsapp: string | null;
   stock: number;
   image: string | null;
 };
@@ -15,6 +16,11 @@ export default function TuguDanSanggahPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [profileData, setProfileData] = useState<{ whatsapp: string | null } | null>(null);
+
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
 
   useEffect(() => {
     fetchProducts();
@@ -30,6 +36,21 @@ export default function TuguDanSanggahPage() {
       }
     } catch (error) {
       console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchProfileData = async () => {
+    try {
+      const res = await fetch('/api/profile-data');
+      const data = await res.json();
+      
+      if (data.success) {
+        setProfileData(data.profileData);
+      }
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
     } finally {
       setLoading(false);
     }
@@ -51,6 +72,21 @@ export default function TuguDanSanggahPage() {
           Memuat produk...
         </div>
       </div>
+    );
+  }
+
+      if (!profileData) {
+    return (
+      <section id="contact" className="contact-section">
+        <div className="container">
+          <header className="contact-header">
+            <h2>GET IN TOUCH</h2>
+          </header>
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#6b7280' }}>
+            Data kontak tidak tersedia
+          </div>
+        </div>
+      </section>
     );
   }
 
@@ -140,8 +176,11 @@ export default function TuguDanSanggahPage() {
                   <span className="stock-value">{selectedProduct.stock} unit</span>
                 </div>
                 <div className="popup-actions">
-                  <button className="contact-button primary">Pesan Sekarang</button>
-                  <button className="contact-button secondary">Tanya Detail</button>
+                {profileData.whatsapp && (
+                <a href={profileData.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+                  <button className="contact-button">Pesan Sekarang</button>
+                  </a>
+                )}
                 </div>
               </div>
             </div>

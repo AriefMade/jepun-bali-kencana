@@ -219,34 +219,21 @@
 }
 
 .contact-button {
-  flex: 1;
+  background: #7F8E6E;
+  color: white;
   border: none;
-  padding: 16px 24px;
+  padding: 16px 32px;
   font-family: 'Inter', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease;
+  width: 100%;
 }
 
-.contact-button.primary {
-  background: #7F8E6E;
-  color: white;
-}
-
-.contact-button.primary:hover {
+.contact-button:hover {
   background: #6a7a5c;
-}
-
-.contact-button.secondary {
-  background: white;
-  color: #7F8E6E;
-  border: 2px solid #7F8E6E;
-}
-
-.contact-button.secondary:hover {
-  background: #f5f5f5;
 }
 
 @media (max-width: 768px) {
